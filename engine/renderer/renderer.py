@@ -27,8 +27,8 @@ class Renderer:
     def render(self):
         self.__frame_clock.tick(self.__target_framerate)
         self.__screen.fill((0,0,0))
-
-        for rendereable in self.__render_queue:
+        
+        for rendereable in sorted(self.__render_queue):
             if rendereable.type == RenderableType.RECT:
                 self.__render_rect(rendereable)
             if rendereable.type == RenderableType.LINE:
