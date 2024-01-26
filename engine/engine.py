@@ -1,8 +1,6 @@
 import pygame
 from engine.renderer.renderer import Renderer
-from engine.renderer.rendering_camera import RenderingCamera
 from engine.input_handler.input_handler import InputHandler
-from engine.renderer.renderable_rect import RenderableRect
 
 class Engine:
     def __init__(self) -> None:
@@ -13,8 +11,8 @@ class Engine:
 
     def run(self):
         while self.__loop:
-            self.update()
-            
+            self.update()            
+
     def update(self):
         self.__input_handler.handle_events()
         self.__renderer.render()
