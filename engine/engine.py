@@ -15,7 +15,6 @@ class Engine:
         while self.__loop:
             self.update()
             
-
     def update(self):
         self.__input_handler.handle_events()
         self.__renderer.render()
