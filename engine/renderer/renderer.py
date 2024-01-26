@@ -15,7 +15,7 @@ class Renderer:
         self.__frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
         self.__total_render_scale = self.__rendering_camera.render_scale * self.__get_pixels_per_unit()
-
+        
     def set_resolution(self, resolution : tuple):
         self.__screen = pygame.display.set_mode(resolution)
 
@@ -38,7 +38,7 @@ class Renderer:
     def __render_rect(self, rendereable_rect : RenderableRect):
         return pygame.draw.rect(self.__screen, rendereable_rect.color, self.__world_to_screen_rect(rendereable_rect.rect), int(rendereable_rect.width * self.__total_render_scale), int(rendereable_rect.border_radius * self.__total_render_scale))
 
-    def __render_circle(self, renderable_line : RenderableLine):
+    def __render_line(self, renderable_line : RenderableLine):
         if renderable_line.anti_aliased:
             return pygame.draw.aaline(self.__screen, renderable_line.color, self.__rendering_camera.world_to_screen_coordinates(renderable_line.start_position), self.__rendering_camera.world_to_screen_coordinates(renderable_line.end_position), renderable_line.width)
         else:
