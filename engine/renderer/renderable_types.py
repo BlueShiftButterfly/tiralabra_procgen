@@ -5,3 +5,5 @@ class RenderableType(Enum):
     LINE = 1
     CIRCLE = 2
     SPRITE = 3
+    DEBUG_GRID = 4
+    GRID = 5
