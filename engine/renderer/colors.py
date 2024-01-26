@@ -1,6 +1,7 @@
 from pygame import Color
 
 class ColorPrefabs:
+    """Utility class for predefined constant color variables"""
     RED = Color(255, 0, 0)
     GREEN = Color(0, 255, 0)
     BLUE = Color(0, 0, 255)
