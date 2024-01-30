@@ -5,11 +5,15 @@ from engine.renderer.renderable import Renderable
 
 class RenderableRect(Renderable):
     """Used to render rects by the render queue"""
-    def __init__(self, position : Vector2, rect : Rect, color : Color, width : int = 0, border_radius : int = 0) -> None:
+    def __init__(self, position : Vector2, height : float, width : float, color : Color, border_width : int = 0, border_radius : int = 0) -> None:
         super().__init__()
         self.type = RenderableType.RECT
         self.position = position
-        self.rect = rect
-        self.color = color
+        self.height = height
         self.width = width
+        self.color = color
+        self.border_width = border_width
         self.border_radius = border_radius
+
+    def __cmp___(self, other):
+        return super().__cmp___(other)
