@@ -12,7 +12,7 @@ class Camera(Object):
         self.max_zoom = 1000000
 
     def move(self, direction : Vector2):
-        self.position += direction * self.speed * self.rendering_camera.zoom
+        self.position += direction.normalize() * self.speed * self.rendering_camera.zoom
     
     def zoom_in(self):
         self.rendering_camera.zoom = max(self.rendering_camera.zoom - (0.1 * self.rendering_camera.zoom), self.min_zoom)
