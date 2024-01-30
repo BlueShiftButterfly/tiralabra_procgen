@@ -85,19 +85,19 @@ class Renderer:
                                 br)
 
     def __draw_world_grid(self):
-        size = 20
-        for x in range(-math.floor(self.__rendering_camera.position.x) - size, math.ceil(self.__rendering_camera.position.x) + size+1):
+        size = 200
+        for x in range(-size, size+1):
             startpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, -size))
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, size))
             if x == 0:
-                pygame.draw.line(self.__screen, ColorPrefabs.GREEN, startpos, endpos)
+                pygame.draw.aaline(self.__screen, ColorPrefabs.GREEN, startpos, endpos)
             else:
-                pygame.draw.line(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+                pygame.draw.aaline(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
 
-        for y in range(-math.floor(self.__rendering_camera.position.y) - size, math.ceil(self.__rendering_camera.position.y) + size+1):
+        for y in range(-size, size+1):
             startpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(-size, y))
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(size, y))
             if y == 0:
-                pygame.draw.line(self.__screen, ColorPrefabs.RED, startpos, endpos)
+                pygame.draw.aaline(self.__screen, ColorPrefabs.RED, startpos, endpos)
             else:
-                pygame.draw.line(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+                pygame.draw.aaline(self.__screen, ColorPrefabs.GRAY, startpos, endpos)

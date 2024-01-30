@@ -12,7 +12,7 @@ from engine.renderer.colors import ColorPrefabs
 
 class ObjectHandler:
     def __init__(self) -> None:
-        self.__objects : dict[str, Object] = {}
+        self.__objects : dict = {}
         self.__builting_camera_id = "MAIN_CAMERA"
     
     def get_new_uuid(self) -> str:

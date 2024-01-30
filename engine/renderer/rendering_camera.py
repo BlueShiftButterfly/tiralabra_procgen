@@ -8,7 +8,7 @@ class RenderingCamera:
         self.position = Vector2(0,0)
         self.__screen = screen
         self.zoom = 1
-        self.total_render_scale = (1 / self.zoom) * self.__get_units_per_pixel()
+        #self.total_render_scale = (1 / self.zoom) * self.__get_units_per_pixel()
         self.camera_verts_world = self.__get_camera_verts()
 
     def __get_units_per_pixel(self):
@@ -16,6 +16,10 @@ class RenderingCamera:
     
     def __get_pixels_per_unit(self):
         return 1 / self.__get_units_per_pixel()
+
+    @property
+    def total_render_scale(self):
+        return (self.zoom) * self.__get_units_per_pixel()
 
     def __get_camera_verts(self):
         screen_verts = [
