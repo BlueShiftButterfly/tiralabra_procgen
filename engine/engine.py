@@ -1,6 +1,8 @@
 import pygame
+from pygame import Vector2
 from engine.renderer.renderer import Renderer
 from engine.input_handler.input_handler import InputHandler
+from engine.objects.object_handler import ObjectHandler
 
 class Engine:
     """Engine class is the main wrapper of the pygame based game engine. 
@@ -9,6 +11,8 @@ class Engine:
         pygame.init()
         self.__renderer = Renderer()
         self.__input_handler = InputHandler()
+        self.__object_handler = ObjectHandler()
+        self.__object_handler.create_camera(Vector2(0,0), self.renderer.rendering_camera)
         self.__loop = True
 
     @property
@@ -20,6 +24,10 @@ class Engine:
     def input_handler(self):
         """Read-only reference to the input handler"""
         return self.__input_handler
+    
+    @property
+    def object_handler(self):
+        return self.__object_handler
 
     def run(self):
         """Starts the main loop"""
@@ -29,6 +37,8 @@ class Engine:
     def update(self):
         """The main program loop. Runs every frame"""
         self.__input_handler.handle_events()
+        self.__object_handler.update_objects()
+        self.__renderer.add_list_to_queue(self.__object_handler.get_rendering_components())
         self.__renderer.render()
 
     def halt(self):

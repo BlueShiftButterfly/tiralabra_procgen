@@ -6,3 +6,6 @@ class RenderableDebugGrid(Renderable):
     def __init__(self) -> None:
         super().__init__()
         self.type = RenderableType.DEBUG_GRID
+
+    def __cmp___(self, other):
+        return super().__cmp___(other)

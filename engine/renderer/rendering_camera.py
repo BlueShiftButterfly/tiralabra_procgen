@@ -13,6 +13,9 @@ class RenderingCamera:
 
     def __get_units_per_pixel(self):
         return 1 / (self.__screen.get_height() / 16)
+    
+    def __get_pixels_per_unit(self):
+        return 1 / self.__get_units_per_pixel()
 
     def __get_camera_verts(self):
         screen_verts = [
