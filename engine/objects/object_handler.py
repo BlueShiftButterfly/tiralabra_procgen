@@ -1,4 +1,4 @@
-from pygame import Vector2, Rect
+from pygame import Vector2, Color
 import uuid
 from engine.objects.object import Object
 from engine.renderer.renderable import Renderable
@@ -23,9 +23,9 @@ class ObjectHandler:
         self.__objects[id] = Object(id, start, RenderableLine(start, end, color=ColorPrefabs.GREEN))
         return id
 
-    def create_point(self, position : Vector2):
+    def create_point(self, position : Vector2, color : Color = ColorPrefabs.RED):
         id = self.get_new_uuid()
-        self.__objects[id] = Object(id, position, RenderableCircle(position, color=ColorPrefabs.RED, radius=0.1, is_filled=True))
+        self.__objects[id] = Object(id, position, RenderableCircle(position, color=color, radius=0.1, is_filled=True))
         return 
     
     def create_circle(self, position : Vector2, radius : float, border_width : float, is_filled : bool):
