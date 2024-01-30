@@ -4,6 +4,7 @@ from engine.objects.object import Object
 from engine.renderer.renderable import Renderable
 from engine.renderer.renderable_line import RenderableLine
 from engine.renderer.renderable_rect import RenderableRect
+from engine.renderer.renderable_circle import RenderableCircle
 from engine.renderer.renderable_debug_grid import RenderableDebugGrid
 from engine.renderer.rendering_camera import RenderingCamera
 from engine.objects.camera_object import Camera
@@ -24,8 +25,12 @@ class ObjectHandler:
 
     def create_point(self, position : Vector2):
         id = self.get_new_uuid()
-        centerd_pos = Vector2(position.x - 0.05, position.y - 0.05)
-        self.__objects[id] = Object(id, centerd_pos, RenderableRect(centerd_pos, width=0.1, height=0.1, color=ColorPrefabs.RED))
+        self.__objects[id] = Object(id, position, RenderableCircle(position, color=ColorPrefabs.RED, radius=0.1, is_filled=True))
+        return 
+    
+    def create_circle(self, position : Vector2, radius : float, border_width : float, is_filled : bool):
+        id = self.get_new_uuid()
+        self.__objects[id] = Object(id, position, RenderableCircle(position, color=ColorPrefabs.RED, radius=radius, border_width=border_width, is_filled=is_filled))
         return id
     
     def create_debug_grid(self):

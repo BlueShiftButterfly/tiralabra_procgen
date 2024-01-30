@@ -8,6 +8,8 @@ from engine.renderer.renderable_rect import RenderableRect
 from engine.renderer.renderable_line import RenderableLine
 from engine.renderer.rendering_camera import RenderingCamera
 from engine.renderer.renderable_types import RenderableType
+from engine.renderer.renderable_circle import RenderableCircle
+
 from engine.renderer.colors import ColorPrefabs
 
 class Renderer:
@@ -44,6 +46,8 @@ class Renderer:
                 self.__render_line(rendereable)
             if rendereable.type == RenderableType.DEBUG_GRID:
                 self.__draw_world_grid()
+            if rendereable.type == RenderableType.CIRCLE:
+                self.__draw_circle(rendereable)
 
         pygame.display.update()
         self.__render_queue.clear()
@@ -62,20 +66,23 @@ class Renderer:
                                       renderable_line.color,
                                       self.__rendering_camera.world_to_screen_coordinates(renderable_line.position),
                                       self.__rendering_camera.world_to_screen_coordinates(renderable_line.end_position),
-                                      renderable_line.width)
+                                      max(1, int(renderable_line.width / self.rendering_camera.total_render_scale)))
 
         return pygame.draw.line(self.__screen,
                                 renderable_line.color,
                                 self.__rendering_camera.world_to_screen_coordinates(renderable_line.position),
                                 self.__rendering_camera.world_to_screen_coordinates(renderable_line.end_position),
-                                renderable_line.width)
-
-    def __world_to_screen_rect(self, rect : Rect):
-        pos = self.__rendering_camera.world_to_screen_coordinates(Vector2(rect.left, rect.top))
-        return Rect(pos.x,
-                    pos.y - int(rect.height / self.__rendering_camera.total_render_scale),
-                    int((rect.width / self.__rendering_camera.total_render_scale)),
-                    int(rect.height / self.__rendering_camera.total_render_scale))
+                                max(1, int(renderable_line.width / self.rendering_camera.total_render_scale)))
+    
+    def __draw_circle(self, renderable_circle : RenderableCircle):
+        br = int(max(1, renderable_circle.border_width / self.rendering_camera.total_render_scale))
+        if renderable_circle.is_filled:
+            br = 0
+        return pygame.draw.circle(self.__screen, 
+                                renderable_circle.color,
+                                self.rendering_camera.world_to_screen_coordinates(renderable_circle.position),
+                                renderable_circle.radius / self.rendering_camera.total_render_scale,
+                                br)
 
     def __draw_world_grid(self):
         size = 20

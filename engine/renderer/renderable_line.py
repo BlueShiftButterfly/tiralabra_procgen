@@ -5,7 +5,7 @@ from engine.renderer.renderable import Renderable
 
 class RenderableLine(Renderable):
     """Used to render lines by the render queue"""
-    def __init__(self, position : Vector2, end_position : Vector2, color : Color, width : int = 1, anti_aliased : bool = False) -> None:
+    def __init__(self, position : Vector2, end_position : Vector2, color : Color, width : float = 0.025, anti_aliased : bool = False) -> None:
         super().__init__()
         self.type = RenderableType.LINE
         self.position = position
