@@ -22,8 +22,10 @@ class Triangle:
     def __init__(self, vertices : tuple[Point, Point, Point]) -> None:
         self.vertices = vertices
         self.edges = (Edge((vertices[0], vertices[1])), Edge((vertices[1], vertices[2])), Edge((vertices[2], vertices[0])))
-        self.circumcenter = self.get_circumcenter()
-        self.circumcircle_radius = self.vertices[0].distance(self.circumcenter)
+
+    
+    def get_circumcircle_radius(self):
+        return self.vertices[0].distance(self.get_circumcenter())
 
     def get_circumcenter(self) -> Point:
         # From https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
@@ -33,7 +35,7 @@ class Triangle:
         return Point(ux, uy)
     
     def is_point_in_circumcircle(self, point : Point) -> bool:
-        if (self.circumcenter.distance(point) <= self.circumcircle_radius):
+        if (self.get_circumcenter().distance(point) < self.get_circumcircle_radius()):
             return True
         return False
 

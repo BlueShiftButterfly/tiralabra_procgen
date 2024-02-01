@@ -66,7 +66,7 @@ class TestBowyerWatsonTriangle(unittest.TestCase):
         triangle = Triangle((point1, point2, point3))
 
         expected = 4.1302282506746
-        result = triangle.circumcircle_radius
+        result = triangle.get_circumcircle_radius()
         self.assertAlmostEqual(expected, result)
     
         
