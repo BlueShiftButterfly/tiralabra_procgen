@@ -15,6 +15,20 @@ class TestBowyerWatsonPoint(unittest.TestCase):
         result = repr(point)
 
         self.assertEqual(expected, result)
+    
+    def test_are_points_equal(self):
+        point1 = Point(1, 1)
+        point2 = Point(1, 1)
+        expected = True
+        result = point1 == point2
+        self.assertAlmostEqual(expected, result)
+    
+    def test_are_points_equal_precision(self):
+        point1 = Point(1000.00432380430320, 1000.434321328402)
+        point2 = Point(1000.00432380430320, 1000.434321328402)
+        expected = True
+        result = point1 == point2
+        self.assertAlmostEqual(expected, result)
 
 class TestBowyerWatsonEdge(unittest.TestCase):
     def test_edge_length(self):
@@ -25,6 +39,16 @@ class TestBowyerWatsonEdge(unittest.TestCase):
         expected = 10.2961157724649
         result = edge.length()
         self.assertAlmostEqual(expected, result)
+    
+    def test_are_edges_equal(self):
+        point1 = Point(4, -7.1)
+        point2 = Point(2, 3)
+        edge1 = Edge((point1, point2))
+        edge2 = Edge((point2, point1))
+
+        expected = True
+        result = edge1 == edge2
+        self.assertEqual(expected, result)
 
 class TestBowyerWatsonTriangle(unittest.TestCase):
     def test_circumcenter(self):
@@ -69,4 +93,12 @@ class TestBowyerWatsonTriangle(unittest.TestCase):
         result = triangle.get_circumcircle_radius()
         self.assertAlmostEqual(expected, result)
     
-        
+    def test_has_vertex(self):
+        point1 = Point(-5, 3.5)
+        point2 = Point(1.1, -2)
+        point3 = Point(2, 3)
+        triangle = Triangle((point1, point2, point3))
+
+        expected = True
+        result = triangle.has_vertex(point1)
+        self.assertAlmostEqual(expected, result)       

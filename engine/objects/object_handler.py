@@ -18,9 +18,9 @@ class ObjectHandler:
     def get_new_uuid(self) -> str:
         return str(uuid.uuid4())
 
-    def create_line(self, start : Vector2, end : Vector2):
+    def create_line(self, start : Vector2, end : Vector2, color : Color = ColorPrefabs.GREEN):
         id = self.get_new_uuid()
-        self.__objects[id] = Object(id, start, RenderableLine(start, end, color=ColorPrefabs.GREEN))
+        self.__objects[id] = Object(id, start, RenderableLine(start, end, color=color))
         return id
 
     def create_point(self, position : Vector2, color : Color = ColorPrefabs.RED):
