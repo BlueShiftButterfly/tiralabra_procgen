@@ -1,6 +1,6 @@
 # ProcGenPy
 
-![CI](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![python-app](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
 ## Project Specification
 
