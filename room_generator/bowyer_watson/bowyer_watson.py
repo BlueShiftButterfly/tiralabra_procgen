@@ -99,7 +99,6 @@ class BowyerWatson:
             max_p.y = max(max_p.y, p.y)
             min_p.x = min(min_p.x, p.x)
             min_p.y = min(min_p.y, p.y)
-
         super_triangle = self.create_supertriangle((min_p.x, min_p.y), (max_p.x, max_p.y))
         triangles = []
         triangles.append(super_triangle)
@@ -133,11 +132,11 @@ class BowyerWatson:
         return output
     
     def create_supertriangle(self, minpoint : tuple[float, float], maxpoint : tuple[float, float]) -> Triangle:
-        # Since in an equilateral triangle the sagitta ratio compared to the circumcircle radius is about 0.567, 
-        # mutliplying the radious by 3 should be enough to encompass all points in the supertriangle, 
-        # if they are inside the original circumcircle
-        
-        size_mult = 3 
+        # !!!!!!!!! The circumcircles of the triangles have to also be inside the super triangle!
+        # A large value is a hack, and should ideally use infinity when calculating.
+        # I have no idea how to implement it, so this stays for now
+        # Also floating point precision is an issue with very large triangles
+        size_mult = 3000000
         avg_point = Point((minpoint[0]+maxpoint[0])*0.5, (minpoint[1]+maxpoint[1])*0.5)
         cc_radius = max(avg_point.distance(Point(maxpoint[0], maxpoint[1])), avg_point.distance(Point(minpoint[0], minpoint[1])))
         cc_radius *= size_mult
