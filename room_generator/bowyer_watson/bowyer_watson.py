@@ -1,6 +1,7 @@
 import math
 
 class Point:
+    """"""
     def __init__(self, x : float, y : float) -> None:
         self.x = x
         self.y = y
@@ -19,6 +20,7 @@ class Point:
         return False
 
 class Edge:
+    """"""
     def __init__(self, vertices : tuple[Point, Point]) -> None:
         self.vertices = vertices
 
@@ -38,6 +40,7 @@ class Edge:
         return f"Edge[{self.vertices[0]}, {self.vertices[1]}]"
 
 class Triangle:
+    """"""
     def __init__(self, vertices : tuple[Point, Point, Point]) -> None:
         self.vertices = vertices
         self.edges = (Edge((vertices[0], vertices[1])), Edge((vertices[1], vertices[2])), Edge((vertices[2], vertices[0])))
@@ -46,7 +49,7 @@ class Triangle:
         return self.vertices[0].distance(self.get_circumcenter())
 
     def get_circumcenter(self) -> Point:
-        # From https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
+        # Formula from https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
         d = 2 * (self.vertices[0].x * (self.vertices[1].y - self.vertices[2].y) + self.vertices[1].x * (self.vertices[2].y - self.vertices[0].y) + self.vertices[2].x * (self.vertices[0].y - self.vertices[1].y))
         ux = (1 / d) * ((self.vertices[0].x**2 + self.vertices[0].y**2) * (self.vertices[1].y - self.vertices[2].y) + (self.vertices[1].x**2 + self.vertices[1].y**2) * (self.vertices[2].y - self.vertices[0].y) + (self.vertices[2].x**2 + self.vertices[2].y**2) * (self.vertices[0].y - self.vertices[1].y))
         uy = (1 / d) * ((self.vertices[0].x**2 + self.vertices[0].y**2) * (self.vertices[2].x - self.vertices[1].x) + (self.vertices[1].x**2 + self.vertices[1].y**2) * (self.vertices[0].x - self.vertices[2].x) + (self.vertices[2].x**2 + self.vertices[2].y**2) * (self.vertices[1].x - self.vertices[0].x))
@@ -87,8 +90,10 @@ class Triangle:
         return f"Triangle[{self.edges[0]}, {self.edges[1]}, {self.edges[2]}]"
 
 class BowyerWatson:
+    """"""
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
+    # Also this implementation only returns triangles, not edges. Will be changes in the future
     def triangulate_points(self, points : list[tuple[float, float]]):
         bw_points = [Point(p[0], p[1]) for p in points]
         max_p = Point(points[0][0], points[0][1])
