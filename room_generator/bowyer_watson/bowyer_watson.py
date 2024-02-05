@@ -1,7 +1,7 @@
 import math
 
 class Point:
-    """"""
+    """Point class used in Triangulation that contains useful functions for working with points"""
     def __init__(self, x : float, y : float) -> None:
         self.x = x
         self.y = y
@@ -20,7 +20,7 @@ class Point:
         return False
 
 class Edge:
-    """"""
+    """Edge class used in Triangulation that contains useful functions for the Bowyer-Watson algorithm"""
     def __init__(self, vertices : tuple[Point, Point]) -> None:
         self.vertices = vertices
 
@@ -40,7 +40,8 @@ class Edge:
         return f"Edge[{self.vertices[0]}, {self.vertices[1]}]"
 
 class Triangle:
-    """"""
+    """Triangle class used in Triangulation that contains useful functions for the Bowyer-Watson algorithm, 
+    such as calculating circumcircles"""
     def __init__(self, vertices : tuple[Point, Point, Point]) -> None:
         self.vertices = vertices
         self.edges = (Edge((vertices[0], vertices[1])), Edge((vertices[1], vertices[2])), Edge((vertices[2], vertices[0])))
@@ -90,7 +91,8 @@ class Triangle:
         return f"Triangle[{self.edges[0]}, {self.edges[1]}, {self.edges[2]}]"
 
 class BowyerWatson:
-    """"""
+    """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function.
+    This is a very WIP implementation and is not very optimized"""
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
     # Also this implementation only returns triangles, not edges. Will be changes in the future
