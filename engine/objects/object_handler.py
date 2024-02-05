@@ -7,6 +7,7 @@ from engine.renderer.renderable_rect import RenderableRect
 from engine.renderer.renderable_circle import RenderableCircle
 from engine.renderer.renderable_debug_grid import RenderableDebugGrid
 from engine.renderer.rendering_camera import RenderingCamera
+from engine.renderer.renderable_tilemap import RenderableTilemap
 from engine.objects.camera_object import Camera
 from engine.renderer.colors import ColorPrefabs
 
@@ -36,6 +37,11 @@ class ObjectHandler:
     def create_debug_grid(self):
         id = self.get_new_uuid()
         self.__objects[id] = Object(id, Vector2(0,0), RenderableDebugGrid())
+        return id
+    
+    def create_tilemap(self):
+        id = self.get_new_uuid()
+        self.__objects[id] = Object(id, Vector2(0,0), RenderableTilemap(Vector2(0,0)))
         return id
 
     def create_camera(self, position : Vector2, rendering_camera : RenderingCamera):

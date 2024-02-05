@@ -10,7 +10,8 @@ class InputHandler:
             "left" : pygame.K_a,
             "right" : pygame.K_d,
             "zoom_in" : pygame.K_q,
-            "zoom_out" : pygame.K_e
+            "zoom_out" : pygame.K_e,
+            "quit" : pygame.K_ESCAPE
         }
         self.inputs = {
             "up" : False,
@@ -18,7 +19,8 @@ class InputHandler:
             "left" : False,
             "right" : False,
             "zoom_in" : False,
-            "zoom_out" : False
+            "zoom_out" : False,
+            "quit" : False
         }
 
     def handle_events(self):
@@ -31,6 +33,9 @@ class InputHandler:
         for kb in self.keybinds.keys():
             if pressed[self.keybinds[kb]]:
                 self.inputs[kb] = True
+                if kb == "quit":
+                    pygame.quit()
+                    sys.exit()
             else:
                 self.inputs[kb] = False
             

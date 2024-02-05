@@ -3,12 +3,13 @@ from collections import deque
 import pygame
 from pygame import Vector2
 from pygame import Rect
-
+from pygame.locals import *
 from engine.renderer.renderable_rect import RenderableRect
 from engine.renderer.renderable_line import RenderableLine
 from engine.renderer.rendering_camera import RenderingCamera
 from engine.renderer.renderable_types import RenderableType
 from engine.renderer.renderable_circle import RenderableCircle
+from engine.renderer.renderable_tilemap import RenderableTilemap
 
 from engine.renderer.colors import ColorPrefabs
 
@@ -16,17 +17,19 @@ class Renderer:
     """Class responsible for rendering objects using pygame, including handling framerate and resolution."""
     def __init__(self) -> None:
         self.__render_queue = deque()
-        self.set_resolution((1280, 720))
+        self.set_resolution((1200, 720))
         self.__target_framerate = 60
         self.__frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
+        self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 20)
 
     @property
     def rendering_camera(self):
         return self.__rendering_camera
 
     def set_resolution(self, resolution : tuple):
-        self.__screen = pygame.display.set_mode(resolution)
+        flags = DOUBLEBUF
+        self.__screen = pygame.display.set_mode(resolution, flags)
 
     def add_to_queue(self, renderable):
         self.__render_queue.append(renderable)
@@ -48,6 +51,10 @@ class Renderer:
                 self.__draw_world_grid()
             if rendereable.type == RenderableType.CIRCLE:
                 self.__draw_circle(rendereable)
+            if rendereable.type == RenderableType.TILEMAP:
+                self.__render_tilemap(rendereable)
+        self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 15))
+        self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.zoom),True, ColorPrefabs.WHITE), (15, 40))
 
         pygame.display.update()
         self.__render_queue.clear()
@@ -101,3 +108,7 @@ class Renderer:
                 pygame.draw.aaline(self.__screen, ColorPrefabs.RED, startpos, endpos)
             else:
                 pygame.draw.aaline(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+    
+    def __render_tilemap(self, renderable_tilemap : RenderableTilemap):
+        scaled_img_surface = pygame.transform.scale(renderable_tilemap.cached_surface, ((256//self.rendering_camera.total_render_scale), (256//self.rendering_camera.total_render_scale)))
+        self.__screen.blit(scaled_img_surface,self.rendering_camera.world_to_screen_coordinates(Vector2(0, 0)))

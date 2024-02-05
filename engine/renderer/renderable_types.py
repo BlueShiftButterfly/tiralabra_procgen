@@ -7,3 +7,4 @@ class RenderableType(Enum):
     SPRITE = 3
     DEBUG_GRID = 4
     GRID = 5
+    TILEMAP = 6

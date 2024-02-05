@@ -6,12 +6,12 @@ import math
 import random
 import time
 
-if __name__ == "__main__":
+def main():
     e = Engine()
     e.object_handler.create_camera(Vector2(0,0), e.renderer.rendering_camera)
     e.object_handler.get_object_from_id("MAIN_CAMERA").rendering_camera.zoom = 3
     size = 20
-    amount = 500
+    amount = 200
     points = []
     for i in range(amount):
         points.append((random.uniform(-size, size), random.uniform(-size, size)))
@@ -34,3 +34,6 @@ if __name__ == "__main__":
     print(f"Generated {len(tris)} triangles")
     e.run()
     
+
+if __name__ == "__main__":
+    main()
