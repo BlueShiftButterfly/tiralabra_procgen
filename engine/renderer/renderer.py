@@ -48,9 +48,9 @@ class Renderer:
             if rendereable.type == RenderableType.LINE:
                 self.__render_line(rendereable)
             if rendereable.type == RenderableType.DEBUG_GRID:
-                self.__draw_world_grid()
+                self.__render_world_grid()
             if rendereable.type == RenderableType.CIRCLE:
-                self.__draw_circle(rendereable)
+                self.__render_circle(rendereable)
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
         self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 15))
@@ -81,7 +81,7 @@ class Renderer:
                                 self.__rendering_camera.world_to_screen_coordinates(renderable_line.end_position),
                                 max(1, int(renderable_line.width / self.rendering_camera.total_render_scale)))
     
-    def __draw_circle(self, renderable_circle : RenderableCircle):
+    def __render_circle(self, renderable_circle : RenderableCircle):
         br = int(max(1, renderable_circle.border_width / self.rendering_camera.total_render_scale))
         if renderable_circle.is_filled:
             br = 0
@@ -91,7 +91,7 @@ class Renderer:
                                 renderable_circle.radius / self.rendering_camera.total_render_scale,
                                 br)
 
-    def __draw_world_grid(self):
+    def __render_world_grid(self):
         size = 200
         for x in range(-size, size+1):
             startpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, -size))
