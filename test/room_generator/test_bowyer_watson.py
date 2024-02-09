@@ -2,10 +2,17 @@ import unittest
 from room_generator.bowyer_watson.bowyer_watson import Point, Edge, Triangle
 
 class TestBowyerWatsonPoint(unittest.TestCase):
-    def test_point_distance(self):
+    def test_point_distance_nonzero(self):
         point1 = Point(-5, 3.5)
         point2 = Point(1.1, -2)
         expected = 8.2134036793524
+        result = point1.distance(point2)
+        self.assertAlmostEqual(expected, result)
+    
+    def test_point_distance_zero(self):
+        point1 = Point(-5, 3.5)
+        point2 = Point(-5, 3.5)
+        expected = 0
         result = point1.distance(point2)
         self.assertAlmostEqual(expected, result)
 
@@ -31,7 +38,7 @@ class TestBowyerWatsonPoint(unittest.TestCase):
         self.assertAlmostEqual(expected, result)
 
 class TestBowyerWatsonEdge(unittest.TestCase):
-    def test_edge_length(self):
+    def test_edge_length_nonzero(self):
         point1 = Point(4, -7.1)
         point2 = Point(2, 3)
         edge = Edge((point1, point2))
@@ -48,6 +55,26 @@ class TestBowyerWatsonEdge(unittest.TestCase):
 
         expected = True
         result = edge1 == edge2
+        self.assertEqual(expected, result)
+    
+    def test_are_edges_not_equal(self):
+        point1 = Point(4, -7.1)
+        point2 = Point(2, 3)
+        point3 = Point(0, 0)
+        edge1 = Edge((point1, point2))
+        edge2 = Edge((point3, point1))
+
+        expected = False
+        result = edge1 == edge2
+        self.assertEqual(expected, result)
+    
+    def test_edge_repr(self):
+        point1 = Point(4, -7.1)
+        point2 = Point(2, 3)
+        edge = Edge((point1, point2))
+        expected = "Edge[Point<4, -7.1>, Point<2, 3>]"
+        result = repr(edge)
+
         self.assertEqual(expected, result)
 
 class TestBowyerWatsonTriangle(unittest.TestCase):
@@ -101,4 +128,28 @@ class TestBowyerWatsonTriangle(unittest.TestCase):
 
         expected = True
         result = triangle.has_vertex(point1)
-        self.assertAlmostEqual(expected, result)       
+        self.assertEqual(expected, result)      
+
+    def test_has_edge(self):
+        point1 = Point(-5, 3.5)
+        point2 = Point(1.1, -2)
+        point3 = Point(2, 3)
+        triangle = Triangle((point1, point2, point3))
+        edge = Edge((point1, point2))
+
+        expected = True
+        result = triangle.has_edge(edge)
+        self.assertEqual(expected, result)      
+    
+    def test_shares_vertex_with_other_triangle(self):
+        point1 = Point(-5, 3.5)
+        point2 = Point(1.1, -2)
+        point3 = Point(2, 3)
+        point4 = Point(0, 0)
+        point5 = Point(-1, 4)
+        triangle = Triangle((point1, point2, point3))
+        triangle2 = Triangle((point3, point4, point5))
+
+        expected = True
+        result = triangle.shares_vertex_with_triangle(triangle2)
+        self.assertEqual(expected, result)      
