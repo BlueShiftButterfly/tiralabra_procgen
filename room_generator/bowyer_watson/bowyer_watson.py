@@ -94,7 +94,7 @@ class BowyerWatson:
     """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function"""
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
-    # Also this implementation only returns triangles, not edges. Will be changes in the future
+    
     def triangulate_points(self, points : list[tuple[float, float]]):
         points_to_triangulate = [Point(p[0], p[1]) for p in points]
         bounds_max_point = Point(points[0][0], points[0][1])
@@ -141,7 +141,7 @@ class BowyerWatson:
         for triangle in triangles:
             if not triangle.shares_vertex_with_triangle(super_triangle):
                 for e in triangle.edges:
-                    output.append( ((e.vertices[0].x, e.vertices[0].y), (e.vertices[1].x, e.vertices[1].y)) )
+                    output.append(e)
 
         return output
     
