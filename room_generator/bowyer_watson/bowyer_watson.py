@@ -91,8 +91,7 @@ class Triangle:
         return f"Triangle[{self.edges[0]}, {self.edges[1]}, {self.edges[2]}]"
 
 class BowyerWatson:
-    """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function.
-    This is a very WIP implementation and is not very optimized"""
+    """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function"""
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
     # Also this implementation only returns triangles, not edges. Will be changes in the future
@@ -135,7 +134,8 @@ class BowyerWatson:
         output = []
         for triangle in triangles:
             if not triangle.shares_vertex_with_triangle(super_triangle):
-                output.append(triangle)
+                for e in triangle.edges:
+                    output.append(e)
         return output
     
     def create_supertriangle(self, minpoint : tuple[float, float], maxpoint : tuple[float, float]) -> Triangle:
