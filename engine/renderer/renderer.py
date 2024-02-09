@@ -28,8 +28,7 @@ class Renderer:
         return self.__rendering_camera
 
     def set_resolution(self, resolution : tuple):
-        flags = DOUBLEBUF
-        self.__screen = pygame.display.set_mode(resolution, flags)
+        self.__screen = pygame.display.set_mode(resolution)
 
     def add_to_queue(self, renderable):
         self.__render_queue.append(renderable)
@@ -38,7 +37,6 @@ class Renderer:
         self.__render_queue.extend(renderable_list)
 
     def render(self):
-        #print(len(self.__render_queue))
         self.__frame_clock.tick(self.__target_framerate)
         self.__screen.fill((0,0,0))
 
@@ -54,7 +52,7 @@ class Renderer:
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
         self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 15))
-        self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.zoom),True, ColorPrefabs.WHITE), (15, 40))
+        self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.total_render_scale),True, ColorPrefabs.WHITE), (15, 40))
 
         pygame.display.update()
         self.__render_queue.clear()
