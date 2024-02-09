@@ -27,7 +27,7 @@ def main():
     endtime = time.time()
     print(f"Creating triangulation for {amount} vertices took {endtime-starttime} seconds")
     for p in tris:
-        e.object_handler.create_line(Vector2(p.vertices[0].x, p.vertices[0].y), Vector2(p.vertices[1].x, p.vertices[1].y))
+        e.object_handler.create_line(Vector2(p[0][0], p[0][1]), Vector2(p[1][0], p[1][1]))
 
     e.object_handler.create_line(Vector2(size, size), Vector2(-size, size), color=ColorPrefabs.ORANGE)
     e.object_handler.create_line(Vector2(-size, size), Vector2(-size, -size), color=ColorPrefabs.ORANGE)

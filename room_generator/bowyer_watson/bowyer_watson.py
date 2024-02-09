@@ -96,24 +96,27 @@ class BowyerWatson:
     # This is an inefficient algorithm with no optimizations
     # Also this implementation only returns triangles, not edges. Will be changes in the future
     def triangulate_points(self, points : list[tuple[float, float]]):
-        bw_points = [Point(p[0], p[1]) for p in points]
-        max_p = Point(points[0][0], points[0][1])
-        min_p = Point(points[0][0], points[0][1])
+        points_to_triangulate = [Point(p[0], p[1]) for p in points]
+        bounds_max_point = Point(points[0][0], points[0][1])
+        bounds_min_point = Point(points[0][0], points[0][1])
 
-        for p in bw_points:
-            max_p.x = max(max_p.x, p.x)
-            max_p.y = max(max_p.y, p.y)
-            min_p.x = min(min_p.x, p.x)
-            min_p.y = min(min_p.y, p.y)
-        super_triangle = self.create_supertriangle((min_p.x, min_p.y), (max_p.x, max_p.y))
-        triangles = []
+        for p in points_to_triangulate:
+            bounds_max_point.x = max(bounds_max_point.x, p.x)
+            bounds_max_point.y = max(bounds_max_point.y, p.y)
+            bounds_min_point.x = min(bounds_min_point.x, p.x)
+            bounds_min_point.y = min(bounds_min_point.y, p.y)
+
+        super_triangle = self.create_supertriangle((bounds_min_point.x, bounds_min_point.y), (bounds_max_point.x, bounds_max_point.y))
+        triangles : list[Triangle] = []
         triangles.append(super_triangle)
-        for point in bw_points:
-            bad_triangles = []
+
+        for point in points_to_triangulate:
+            bad_triangles : list[Triangle] = []
             for t in triangles:
                 if t.is_point_in_circumcircle(point):
                     bad_triangles.append(t)
-            polygon = []
+
+            polygon : list[Edge] = []
             for bad_triangle in bad_triangles:
                 for edge in bad_triangle.edges:
                     valid = True
@@ -125,17 +128,21 @@ class BowyerWatson:
                             break
                     if edge not in polygon and valid:
                         polygon.append(edge)
+
             for bad_triangle in bad_triangles:
                 triangles.remove(bad_triangle)
+
             for edge in polygon:
                 new_triangle = Triangle((edge.vertices[0], edge.vertices[1], point))
                 if new_triangle not in triangles:
                     triangles.append(new_triangle)
+
         output = []
         for triangle in triangles:
             if not triangle.shares_vertex_with_triangle(super_triangle):
                 for e in triangle.edges:
-                    output.append(e)
+                    output.append( ((e.vertices[0].x, e.vertices[0].y), (e.vertices[1].x, e.vertices[1].y)) )
+
         return output
     
     def create_supertriangle(self, minpoint : tuple[float, float], maxpoint : tuple[float, float]) -> Triangle:
