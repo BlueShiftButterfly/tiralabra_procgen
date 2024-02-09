@@ -6,7 +6,7 @@ class Point:
         self.x = x
         self.y = y
     
-    def distance(self, other : "Point") -> float:
+    def get_distance_to(self, other : "Point") -> float:
         return math.sqrt(abs(self.x - other.x)**2 + abs(self.y - other.y)**2)
     
     def __repr__(self) -> str:
@@ -22,10 +22,12 @@ class Point:
 class Edge:
     """Edge class used in Triangulation that contains useful functions for the Bowyer-Watson algorithm"""
     def __init__(self, vertices : tuple[Point, Point]) -> None:
+        if vertices[0].get_distance_to(vertices[1]) == 0:
+            raise ValueError("Distance between given vertices is 0. Only edges of non-zero length are considered valid.")
         self.vertices = vertices
 
-    def length(self):
-        return self.vertices[0].distance(self.vertices[1])
+    def get_length(self):
+        return self.vertices[0].get_distance_to(self.vertices[1])
     
     def __eq__(self, __value: object) -> bool:
         if not isinstance(__value, Edge):
@@ -43,11 +45,16 @@ class Triangle:
     """Triangle class used in Triangulation that contains useful functions for the Bowyer-Watson algorithm, 
     such as calculating circumcircles"""
     def __init__(self, vertices : tuple[Point, Point, Point]) -> None:
+        if vertices[0] == vertices[1] or vertices[0] == vertices[2] or vertices[1] == vertices[2]:
+            raise ValueError("Created triangle contains identical points. Only triangles with a non-zero area are considered valid.")
+        # Check cross product of vertices to check if the 3 given points are on a single line, and thus making an invalid triangle
+        if (vertices[1].x - vertices[0].x) * (vertices[2].y - vertices[0].y) - (vertices[1].y - vertices[0].y) * (vertices[2].x - vertices[0].x) == 0:
+            raise ValueError("Created triangle has all 3 points on a single line. Only triangles with a non-zero area are considered valid.")
         self.vertices = vertices
         self.edges = (Edge((vertices[0], vertices[1])), Edge((vertices[1], vertices[2])), Edge((vertices[2], vertices[0])))
     
     def get_circumcircle_radius(self):
-        return self.vertices[0].distance(self.get_circumcenter())
+        return self.vertices[0].get_distance_to(self.get_circumcenter())
 
     def get_circumcenter(self) -> Point:
         # Formula from https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
@@ -57,7 +64,7 @@ class Triangle:
         return Point(ux, uy)
     
     def is_point_in_circumcircle(self, point : Point) -> bool:
-        if (self.get_circumcenter().distance(point) < self.get_circumcircle_radius()):
+        if (self.get_circumcenter().get_distance_to(point) < self.get_circumcircle_radius()):
             return True
         return False
     
@@ -94,7 +101,7 @@ class BowyerWatson:
     """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function"""
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
-    
+
     def triangulate_points(self, points : list[tuple[float, float]]):
         points_to_triangulate = [Point(p[0], p[1]) for p in points]
         bounds_max_point = Point(points[0][0], points[0][1])
@@ -133,7 +140,12 @@ class BowyerWatson:
                 triangles.remove(bad_triangle)
 
             for edge in polygon:
-                new_triangle = Triangle((edge.vertices[0], edge.vertices[1], point))
+                try:
+                    new_triangle = Triangle((edge.vertices[0], edge.vertices[1], point))
+                except ValueError as e:
+                    # TODO: Implement proper error handling/logging
+                    print(e)
+                    print(f"Invalid triangle {(edge.vertices[0], edge.vertices[1], point)}, skipping triangulation step...")
                 if new_triangle not in triangles:
                     triangles.append(new_triangle)
 
@@ -152,11 +164,11 @@ class BowyerWatson:
         # Also floating point precision is an issue with very large triangles
         size_mult = 3000000
         avg_point = Point((minpoint[0]+maxpoint[0])*0.5, (minpoint[1]+maxpoint[1])*0.5)
-        cc_radius = max(avg_point.distance(Point(maxpoint[0], maxpoint[1])), avg_point.distance(Point(minpoint[0], minpoint[1])))
+        cc_radius = max(avg_point.get_distance_to(Point(maxpoint[0], maxpoint[1])), avg_point.get_distance_to(Point(minpoint[0], minpoint[1])))
         cc_radius *= size_mult
         tip = Point(avg_point.x, avg_point.y + cc_radius) 
         bottom_point = Point(avg_point.x, avg_point.y - cc_radius)
-        height = tip.distance(bottom_point)
+        height = tip.get_distance_to(bottom_point)
         height_vector_normal_down = ( 1, 0)
         height_vector_normal_up = ( -1, 0)
         point2 = Point((height_vector_normal_down[0] * height * (2/math.sqrt(3)) * 0.5) + bottom_point.x, height_vector_normal_down[1] * height * (2/math.sqrt(3)) * 0.5 + bottom_point.y)

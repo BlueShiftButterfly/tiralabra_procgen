@@ -6,14 +6,14 @@ class TestBowyerWatsonPoint(unittest.TestCase):
         point1 = Point(-5, 3.5)
         point2 = Point(1.1, -2)
         expected = 8.2134036793524
-        result = point1.distance(point2)
+        result = point1.get_distance_to(point2)
         self.assertAlmostEqual(expected, result)
     
     def test_point_distance_zero(self):
         point1 = Point(-5, 3.5)
         point2 = Point(-5, 3.5)
         expected = 0
-        result = point1.distance(point2)
+        result = point1.get_distance_to(point2)
         self.assertAlmostEqual(expected, result)
 
     def test_point_repr(self):
@@ -44,7 +44,7 @@ class TestBowyerWatsonEdge(unittest.TestCase):
         edge = Edge((point1, point2))
         
         expected = 10.2961157724649
-        result = edge.length()
+        result = edge.get_length()
         self.assertAlmostEqual(expected, result)
     
     def test_are_edges_equal(self):
@@ -76,6 +76,12 @@ class TestBowyerWatsonEdge(unittest.TestCase):
         result = repr(edge)
 
         self.assertEqual(expected, result)
+    
+    def test_edge_points_are_equal_error(self):
+        point1 = Point(2, 3)
+        point2 = Point(2, 3)
+        with self.assertRaises(ValueError):
+            edge = Edge((point1, point2))
 
 class TestBowyerWatsonTriangle(unittest.TestCase):
     def test_circumcenter(self):
@@ -152,7 +158,28 @@ class TestBowyerWatsonTriangle(unittest.TestCase):
 
         expected = True
         result = triangle.shares_vertex_with_triangle(triangle2)
-        self.assertEqual(expected, result)      
+        self.assertEqual(expected, result)  
+
+    def test_triangle_points_on_single_line_x_axis_error(self):
+        point1 = Point(-5, 0)
+        point2 = Point(1, 0)
+        point3 = Point(2, 0)
+        with self.assertRaises(ValueError):
+            triangle = Triangle((point1, point2, point3))
+    
+    def test_triangle_points_on_single_line_y_axis_error(self):
+        point1 = Point(0, 1)
+        point2 = Point(0, 2)
+        point3 = Point(0, 3)
+        with self.assertRaises(ValueError):
+            triangle = Triangle((point1, point2, point3))
+
+    def test_triangle_points_identical_error(self):
+        point1 = Point(0, 0)
+        point2 = Point(0, 0)
+        point3 = Point(0, 0)
+        with self.assertRaises(ValueError):
+            triangle = Triangle((point1, point2, point3))
 
 class TestBowyerWatson(unittest.TestCase):
     def test_triangulate_three_valid_points(self):
@@ -171,4 +198,14 @@ class TestBowyerWatson(unittest.TestCase):
 
         expected = True
         result = contain_same_edges
+        self.assertEqual(expected, result)
+    
+    def test_triangulate_three_points_on_same_line_return_empty(self):
+        point1 = Point(0, 1)
+        point2 = Point(0, -2)
+        point3 = Point(0, 3)
+        point_list = [(point1.x, point1.y), (point2.x, point2.y), (point3.x, point3.y)]
+
+        expected = []
+        result = BowyerWatson().triangulate_points(point_list)
         self.assertEqual(expected, result)

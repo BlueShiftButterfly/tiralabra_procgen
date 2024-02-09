@@ -11,13 +11,14 @@ def main():
     e.object_handler.create_camera(Vector2(0,0), e.renderer.rendering_camera)
     e.object_handler.get_object_from_id("MAIN_CAMERA").rendering_camera.zoom = 3
     size = 20
-    amount = 64
+    amount = 512
     points = []
-    random.seed(24)
+    random.seed(23)
     for i in range(amount):
         newp = random.randint(-size, size), random.randint(-size, size)
         if newp not in points:
             points.append(newp)
+    #points = [(0, 0), (1, 0), (1, 1), (0, 1), (3, 3), (5,3), (8, -20), (9, -20), (5, -20), (5, -3), (5, -10), (20, 20), (8, -18), (9, -18), (10, -18)]
     for p in points:
         e.object_handler.create_point(Vector2((p[0]), p[1]))
 
@@ -27,7 +28,11 @@ def main():
     endtime = time.time()
     print(f"Creating triangulation for {amount} vertices took {endtime-starttime} seconds")
     for p in tris:
-        e.object_handler.create_line(Vector2(p[0][0], p[0][1]), Vector2(p[1][0], p[1][1]))
+        e.object_handler.create_line(Vector2(p.vertices[0].x, p.vertices[0].y), Vector2(p.vertices[1].x, p.vertices[1].y))
+
+    #e.object_handler.create_point(Vector2(8, -20), ColorPrefabs.PINK)
+    #e.object_handler.create_point(Vector2(9, -20), ColorPrefabs.PINK)
+    #e.object_handler.create_point(Vector2(6, -20), ColorPrefabs.PINK)
 
     e.object_handler.create_line(Vector2(size, size), Vector2(-size, size), color=ColorPrefabs.ORANGE)
     e.object_handler.create_line(Vector2(-size, size), Vector2(-size, -size), color=ColorPrefabs.ORANGE)
