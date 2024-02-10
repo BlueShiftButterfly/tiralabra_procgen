@@ -13,8 +13,7 @@ Currently only parts of the Bowyer-Watson implementation is unit tested. The gra
 The unit tests can be run using the following command from the project's root directory
 
 ~~~
-poetry run python3 -m unittest poetry run pylint engine  room_generator
-
+poetry run python3 -m unittest 
 ~~~
 
 or
