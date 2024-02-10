@@ -13,7 +13,7 @@
 
 ## Project Implementation
 
-[Project Specification Document](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/implementation_document.md)
+[Project Implementation Document](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/implementation_document.md)
 
 
 ## Project Specification
