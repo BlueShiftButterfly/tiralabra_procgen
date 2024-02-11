@@ -1,4 +1,3 @@
-from collections import deque
 from room_generator.geometry import Edge
 
 class PrimMinSpanningTree:
