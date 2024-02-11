@@ -2,7 +2,9 @@ import math
 import uuid
 
 class Point:
-    """Point class that contains useful functions for working with points"""
+    """
+    Point class that contains useful functions for working with points.
+    """
     def __init__(self, x : float, y : float) -> None:
         self.id = uuid.uuid4()
         self.x = x
@@ -25,7 +27,9 @@ class Point:
         return False
 
 class Edge:
-    """Edge class that contains useful functions for working with edges"""
+    """
+    Edge class that contains useful functions for working with edges.
+    """
     def __init__(self, vertices : tuple[Point, Point]) -> None:
         if vertices[0].get_distance_to(vertices[1]) == 0:
             raise ValueError("Distance between given vertices is 0. Only edges of non-zero length are considered valid.")
@@ -51,7 +55,9 @@ class Edge:
         return f"Edge[{self.vertices[0]}, {self.vertices[1]}]"
 
 class Triangle:
-    """Triangle class that contains useful functions for working with triangles"""
+    """
+    Triangle class that contains useful functions for working with triangles.
+    """
     def __init__(self, vertices : tuple[Point, Point, Point]) -> None:
         if vertices[0] == vertices[1] or vertices[0] == vertices[2] or vertices[1] == vertices[2]:
             raise ValueError("Created triangle contains identical points. Only triangles with a non-zero area are considered valid.")

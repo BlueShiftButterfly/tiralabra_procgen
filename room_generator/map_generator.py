@@ -6,12 +6,30 @@ from room_generator.geometry import Point
 from room_generator.map import Map
 
 class MapGenerator:
+    """
+    Responsible for generating maps using the given generators.
+
+    Args:
+        point_generator: Generator class responsible for creating a random set of points over an area.
+        triangulator: Generator class responsible for creating a Delaunay triangulation of the points from the point generator.
+        min_tree_generator: Generator Class responsible for crating a Minimum spanning tree from the Delaunay triangulation.
+    """
     def __init__(self, point_generator, triangulator, min_tree_generator) -> None:
         self.point_generator = point_generator
         self.triangulator = triangulator
         self.min_tree_generator = min_tree_generator
 
     def generate(self, size : int = 50, amount : int = 128) -> Map:
+        """
+        Generates a map object using given settings.
+
+        Args: 
+            size: Size of the map to be generated. Currently the side length of square bounds that the map is generated in.
+            amount: How many points are generated inside the bounds.
+
+        Returns:
+            Map object containing generated points, edges, MST, etc.
+        """
         points = self.point_generator.generate_points(amount, (-size, -size), (size, size))
         edges = []
 

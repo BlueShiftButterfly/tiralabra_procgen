@@ -2,11 +2,21 @@ import math
 from room_generator.geometry import Point, Edge, Triangle
 
 class BowyerWatson:
-    """Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function"""
+    """
+    Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function.
+    """
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
+    def triangulate_points(self, points : list[tuple[float, float]]) -> list[Edge]:
+        """
+        Triangulates a given set of points using the Bowyer-Watson algorithm.
 
-    def triangulate_points(self, points : list[tuple[float, float]]):
+        Args:
+            points: List of points that should be triangulated in tuple format. Multiple points should not occupy the same space.
+
+        Returns:
+            Returns the Delaunay triangulation as a list of edges.
+        """
         points_to_triangulate = [Point(p[0], p[1]) for p in points]
         bounds_max_point = Point(points[0][0], points[0][1])
         bounds_min_point = Point(points[0][0], points[0][1])
@@ -61,14 +71,24 @@ class BowyerWatson:
 
         return output
     
-    def create_supertriangle(self, minpoint : tuple[float, float], maxpoint : tuple[float, float]) -> Triangle:
+    def create_supertriangle(self, min_point : tuple[float, float], max_point : tuple[float, float]) -> Triangle:
+        """
+        Creates a triangle encompassing a set of points and the possible circumcircles of triangles made of said points.
+
+        Args:
+            min_point: The point located at the south-west corner of a set of bounds encompassing the points to triangulate.
+            max_point: The point located at the north-east corner of a set of bounds encompassing the points to triangulate.
+
+        Returns:
+            A triangle encompassing the given bounds.
+        """
         # !!!!!!!!! The circumcircles of the triangles have to also be inside the super triangle!
         # A large value is a hack, and should ideally use infinity when calculating.
         # I have no idea how to implement it, so this stays for now
         # Also floating point precision is an issue with very large triangles
         size_mult = 3000000
-        avg_point = Point((minpoint[0]+maxpoint[0])*0.5, (minpoint[1]+maxpoint[1])*0.5)
-        cc_radius = max(avg_point.get_distance_to(Point(maxpoint[0], maxpoint[1])), avg_point.get_distance_to(Point(minpoint[0], minpoint[1])))
+        avg_point = Point((min_point[0]+max_point[0])*0.5, (min_point[1]+max_point[1])*0.5)
+        cc_radius = max(avg_point.get_distance_to(Point(max_point[0], max_point[1])), avg_point.get_distance_to(Point(min_point[0], min_point[1])))
         cc_radius *= size_mult
         tip = Point(avg_point.x, avg_point.y + cc_radius) 
         bottom_point = Point(avg_point.x, avg_point.y - cc_radius)

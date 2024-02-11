@@ -2,7 +2,19 @@ from collections import deque
 from room_generator.geometry import Edge
 
 class PrimMinSpanningTree:
-    def create_tree_from_edges(self, edges : list[Edge]):
+    """
+    Implementation of Prim's algorithm. Used to generate a minimum spanning tree.
+    """
+    def create_tree_from_edges(self, edges : list[Edge]) -> list[Edge]:
+        """
+        Generates a minimum spanning tree from a list of given edges.
+
+        Args:
+            edges: List of edges that the minimum spanning tree is created from.
+        
+        Returns:
+            List of edges contained in the minimum spanning tree.
+        """
         adjacencies = {}
         edges_dict = {}
         visited = set()
@@ -62,6 +74,6 @@ class PrimMinSpanningTree:
         for e in edges:
             if e.id in edge_forest:
                 mst_edges.append(e)
-        return mst_edges
 
+        return mst_edges
         
