@@ -3,11 +3,12 @@ from pygame import Vector2, Color
 from engine.renderer.colors import ColorPrefabs
 from room_generator.map_generator import MapGenerator
 from room_generator.bowyer_watson import BowyerWatson
-from    room_generator.prim_mst import PrimMinSpanningTree
+from room_generator.prim_mst import PrimMinSpanningTree
+from room_generator.random_point_distributor import RandomPointDistributor
 
 def main():
     engine = Engine()
-    map_generator = MapGenerator(BowyerWatson(), PrimMinSpanningTree())
+    map_generator = MapGenerator(RandomPointDistributor(), BowyerWatson(), PrimMinSpanningTree())
     map = map_generator.generate()
     size = map.size
 

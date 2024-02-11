@@ -6,22 +6,16 @@ from room_generator.geometry import Point
 from room_generator.map import Map
 
 class MapGenerator:
-    def __init__(self, triangulator, min_tree_generator) -> None:
+    def __init__(self, point_generator, triangulator, min_tree_generator) -> None:
+        self.point_generator = point_generator
         self.triangulator = triangulator
         self.min_tree_generator = min_tree_generator
 
     def generate(self, size : int = 50, amount : int = 128) -> Map:
-        points = []
+        points = self.point_generator.generate_points(amount, (-size, -size), (size, size))
         edges = []
 
         print("Generating points...")
-        for i in range(amount):
-            newp = random.randint(-size, size), random.randint(-size, size)
-            if newp not in points:
-                points.append(newp)
-            else:
-                amount += 1
-
         points_converted = [Point(p[0], p[1]) for p in points]
 
         print("Triangulating points...")
