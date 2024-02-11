@@ -18,6 +18,7 @@ The program can be run from the project root directory using
 python3 main_gui.py
 ~~~
 
-Currently the program does not have any user inputs. When run, the program generates and displays a random Delaunay triangulation.
+Currently the program does not have any user inputs. When run, the program generates and displays a random Delaunay triangulation with it's corresponding
+Minimum spanning tree.
 
 The user can navigate using WASD and Q/E to zoom in and out.
