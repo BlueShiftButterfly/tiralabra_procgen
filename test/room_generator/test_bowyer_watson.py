@@ -6,7 +6,7 @@ class TestBowyerWatson(unittest.TestCase):
         point1 = Point(-5, 3.5)
         point2 = Point(1.1, -2)
         point3 = Point(2, 3)
-        point_list = [(point1.x, point1.y), (point2.x, point2.y), (point3.x, point3.y)]
+        point_list = [point1, point2, point3]
 
         expected_edges = [Edge((point1, point2)), Edge((point2, point3)), Edge((point1, point3))]
         result_edges = BowyerWatson().triangulate_points(point_list)
@@ -24,7 +24,7 @@ class TestBowyerWatson(unittest.TestCase):
         point1 = Point(0, 1)
         point2 = Point(0, -2)
         point3 = Point(0, 3)
-        point_list = [(point1.x, point1.y), (point2.x, point2.y), (point3.x, point3.y)]
+        point_list = [point1, point2, point3]
 
         expected = []
         result = BowyerWatson().triangulate_points(point_list)
