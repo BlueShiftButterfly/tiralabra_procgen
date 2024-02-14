@@ -10,8 +10,10 @@ class InputHandler:
         "right" : False,
         "zoom_in" : False,
         "zoom_out" : False,
-        "quit" : False
+        "quit" : False,
+        "space" : False
     }
+
     def __init__(self) -> None:
         self.keybinds = {
             "up" : pygame.K_w,
@@ -20,7 +22,8 @@ class InputHandler:
             "right" : pygame.K_d,
             "zoom_in" : pygame.K_q,
             "zoom_out" : pygame.K_e,
-            "quit" : pygame.K_ESCAPE
+            "quit" : pygame.K_ESCAPE,
+            "space" : pygame.K_SPACE
         }
 
     def handle_events(self):

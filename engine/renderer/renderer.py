@@ -51,8 +51,9 @@ class Renderer:
                 self.__render_circle(rendereable)
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
-        self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 15))
+        self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 20))
         self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.total_render_scale),True, ColorPrefabs.WHITE), (15, 40))
+        self.__screen.blit(self.__debug_font.render("Press SPACE to generate a new map",True, ColorPrefabs.WHITE), (15, 60))
 
         pygame.display.update()
         self.__render_queue.clear()
