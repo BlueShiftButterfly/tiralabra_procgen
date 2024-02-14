@@ -3,6 +3,15 @@ import sys
 
 class InputHandler:
     """Input handler is responsible for user input, such as keypresses"""
+    inputs = {
+        "up" : False,
+        "down" : False,
+        "left" : False,
+        "right" : False,
+        "zoom_in" : False,
+        "zoom_out" : False,
+        "quit" : False
+    }
     def __init__(self) -> None:
         self.keybinds = {
             "up" : pygame.K_w,
@@ -12,15 +21,6 @@ class InputHandler:
             "zoom_in" : pygame.K_q,
             "zoom_out" : pygame.K_e,
             "quit" : pygame.K_ESCAPE
-        }
-        self.inputs = {
-            "up" : False,
-            "down" : False,
-            "left" : False,
-            "right" : False,
-            "zoom_in" : False,
-            "zoom_out" : False,
-            "quit" : False
         }
 
     def handle_events(self):
@@ -32,11 +32,11 @@ class InputHandler:
         pressed = pygame.key.get_pressed()
         for kb in self.keybinds.keys():
             if pressed[self.keybinds[kb]]:
-                self.inputs[kb] = True
+                InputHandler.inputs[kb] = True
                 if kb == "quit":
                     pygame.quit()
                     sys.exit()
             else:
-                self.inputs[kb] = False
+                InputHandler.inputs[kb] = False
             
                     
