@@ -7,7 +7,7 @@ class BowyerWatson:
     """
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
     # This is an inefficient algorithm with no optimizations
-    def triangulate_points(self, points : list[tuple[float, float]]) -> list[Edge]:
+    def triangulate_points(self, points : list[Point]) -> list[Edge]:
         """
         Triangulates a given set of points using the Bowyer-Watson algorithm.
 
@@ -17,17 +17,15 @@ class BowyerWatson:
         Returns:
             Returns the Delaunay triangulation as a list of edges.
         """
-        points_to_triangulate = [Point(p[0], p[1]) for p in points]
-        bounds_max_point = Point(points[0][0], points[0][1])
-        bounds_min_point = Point(points[0][0], points[0][1])
+        points_to_triangulate = points
+        bounds_max_point = points[0]
+        bounds_min_point = points[1]
 
         for p in points_to_triangulate:
-            bounds_max_point.x = max(bounds_max_point.x, p.x)
-            bounds_max_point.y = max(bounds_max_point.y, p.y)
-            bounds_min_point.x = min(bounds_min_point.x, p.x)
-            bounds_min_point.y = min(bounds_min_point.y, p.y)
+            bounds_max_point = Point(max(bounds_max_point.x, p.x), max(bounds_max_point.y, p.y))
+            bounds_min_point = Point(min(bounds_min_point.x, p.x), min(bounds_min_point.y, p.y))
 
-        super_triangle = self.create_supertriangle((bounds_min_point.x, bounds_min_point.y), (bounds_max_point.x, bounds_max_point.y))
+        super_triangle = self.create_supertriangle(bounds_min_point, bounds_max_point)
         triangles : list[Triangle] = []
         triangles.append(super_triangle)
 
@@ -71,7 +69,7 @@ class BowyerWatson:
 
         return output
     
-    def create_supertriangle(self, min_point : tuple[float, float], max_point : tuple[float, float]) -> Triangle:
+    def create_supertriangle(self, min_point : Point, max_point : Point) -> Triangle:
         """
         Creates a triangle encompassing a set of points and the possible circumcircles of triangles made of said points.
 
@@ -87,8 +85,8 @@ class BowyerWatson:
         # I have no idea how to implement it, so this stays for now
         # Also floating point precision is an issue with very large triangles
         size_mult = 3000000
-        avg_point = Point((min_point[0]+max_point[0])*0.5, (min_point[1]+max_point[1])*0.5)
-        cc_radius = max(avg_point.get_distance_to(Point(max_point[0], max_point[1])), avg_point.get_distance_to(Point(min_point[0], min_point[1])))
+        avg_point = Point((min_point.x+max_point.x)*0.5, (min_point.y+max_point.y)*0.5)
+        cc_radius = max(avg_point.get_distance_to(max_point), avg_point.get_distance_to(min_point))
         cc_radius *= size_mult
         tip = Point(avg_point.x, avg_point.y + cc_radius) 
         bottom_point = Point(avg_point.x, avg_point.y - cc_radius)

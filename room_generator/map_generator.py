@@ -1,6 +1,6 @@
 import time
-from room_generator.geometry import Point
 from room_generator.map import Map
+import random
 
 class MapGenerator:
     """
@@ -11,12 +11,13 @@ class MapGenerator:
         triangulator: Generator class responsible for creating a Delaunay triangulation of the points from the point generator.
         min_tree_generator: Generator Class responsible for crating a Minimum spanning tree from the Delaunay triangulation.
     """
-    def __init__(self, point_generator, triangulator, min_tree_generator) -> None:
+    def __init__(self, point_generator, triangulator, min_tree_generator, room_connector) -> None:
         self.point_generator = point_generator
         self.triangulator = triangulator
         self.min_tree_generator = min_tree_generator
+        self.room_connector = room_connector
 
-    def generate(self, size : int = 50, amount : int = 128) -> Map:
+    def generate(self, seed : int = None, size : int = 50, amount : int = 128) -> Map:
         """
         Generates a map object using given settings.
 
@@ -27,12 +28,11 @@ class MapGenerator:
         Returns:
             Map object containing generated points, edges, MST, etc.
         """
-        points = self.point_generator.generate_points(amount, (-size, -size), (size, size))
+        random.seed(seed)
+        points = self.point_generator.generate_points(amount, (-size, -size), (size, size), seed, minimum_distance = 4)
         edges = []
 
         print("Generating points...")
-        points_converted = [Point(p[0], p[1]) for p in points]
-
         print("Triangulating points...")
         starttime = time.time()
         edges = self.triangulator.triangulate_points(points)
@@ -45,4 +45,6 @@ class MapGenerator:
         endtime = time.time()
         print(f"Creating MST for {len(points)} vertices with {len(mst)} edges took {endtime-starttime} seconds")
 
-        return Map(size, points_converted, edges, mst)
+        complete_map_diagram = self.room_connector.create_connections(seed, mst, edges)
+
+        return Map(size, points, edges, mst, complete_map_diagram)
