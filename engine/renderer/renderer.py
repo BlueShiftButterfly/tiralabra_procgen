@@ -17,11 +17,11 @@ class Renderer:
     """Class responsible for rendering objects using pygame, including handling framerate and resolution."""
     def __init__(self) -> None:
         self.__render_queue = deque()
-        self.set_resolution((1200, 720))
-        self.__target_framerate = 60
-        self.__frame_clock = pygame.time.Clock()
+        self.set_resolution((1280, 720))
+        self.target_framerate = 60
+        self.frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
-        self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 20)
+        self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 24)
 
     @property
     def rendering_camera(self):
@@ -37,7 +37,6 @@ class Renderer:
         self.__render_queue.extend(renderable_list)
 
     def render(self):
-        self.__frame_clock.tick(self.__target_framerate)
         self.__screen.fill((0,0,0))
 
         for rendereable in sorted(self.__render_queue, key=lambda r: r.sorting_layer):
@@ -51,12 +50,13 @@ class Renderer:
                 self.__render_circle(rendereable)
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
-        self.__screen.blit(self.__debug_font.render(str(self.__frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 25))
+        self.__screen.blit(self.__debug_font.render(str(self.frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 25))
         self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.total_render_scale),True, ColorPrefabs.WHITE), (15, 45))
         self.__screen.blit(self.__debug_font.render("SPACE: generate map     ESC: quit program     W/A/S/D: move camera     Q/E:zoom in/out",True, ColorPrefabs.WHITE), (15, 5))
 
         pygame.display.update()
         self.__render_queue.clear()
+        self.frame_clock.tick_busy_loop(self.target_framerate)
 
     def __render_rect(self, rendereable_rect : RenderableRect):
         screen_position = self.rendering_camera.world_to_screen_coordinates(rendereable_rect.position)
