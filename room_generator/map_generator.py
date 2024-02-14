@@ -28,11 +28,12 @@ class MapGenerator:
         Returns:
             Map object containing generated points, edges, MST, etc.
         """
+        total_start = time.time()
         random.seed(seed)
+        print("Generating points...")
         points = self.point_generator.generate_points(amount, (-size, -size), (size, size), seed, minimum_distance = 4)
         edges = []
-
-        print("Generating points...")
+        print("Points generated")
         print("Triangulating points...")
         starttime = time.time()
         edges = self.triangulator.triangulate_points(points)
@@ -46,5 +47,8 @@ class MapGenerator:
         print(f"Creating MST for {len(points)} vertices with {len(mst)} edges took {endtime-starttime} seconds")
 
         complete_map_diagram = self.room_connector.create_connections(seed, mst, edges)
+        
+        total_end = time.time()
+        print(f"Map took {total_end-total_start} seconds to generate")
 
         return Map(size, points, edges, mst, complete_map_diagram)
