@@ -8,7 +8,6 @@ def main():
     engine.renderer.rendering_camera.zoom = 20
     eg = EngineGenerator(engine.object_handler)
     engine.object_handler.create_generator_object(eg)
-    eg.generate()
     engine.run()
 
 if __name__ == "__main__":
