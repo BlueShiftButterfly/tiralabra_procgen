@@ -6,7 +6,14 @@ class Map:
     """
     Container object used to store information about a generated map.
     """
-    def __init__(self, size : int, points : list[Point], edges : list[Edge], minimum_spanning_tree : list[Edge], map_diagram : list[Edge]) -> None:
+    def __init__(
+            self,
+            size : int,
+            points : list[Point],
+            edges : list[Edge],
+            minimum_spanning_tree : list[Edge],
+            map_diagram : list[Edge]
+        ) -> None:
         self.size = size
         self.points = points
         self.edges = edges
@@ -18,9 +25,12 @@ class MapGenerator:
     Responsible for generating maps using the given generators.
 
     Args:
-        point_generator: Generator class responsible for creating a random set of points over an area.
-        triangulator: Generator class responsible for creating a Delaunay triangulation of the points from the point generator.
-        min_tree_generator: Generator Class responsible for crating a Minimum spanning tree from the Delaunay triangulation.
+        point_generator: Generator class responsible for creating
+        a random set of points over an area.
+        triangulator: Generator class responsible for creating
+        a Delaunay triangulation of the points from the point generator.
+        min_tree_generator: Generator Class responsible for crating
+        a Minimum spanning tree from the Delaunay triangulation.
     """
     def __init__(self, point_generator, triangulator, min_tree_generator, room_connector) -> None:
         self.point_generator = point_generator
@@ -33,7 +43,8 @@ class MapGenerator:
         Generates a map object using given settings.
 
         Args: 
-            size: Size of the map to be generated. Currently the side length of square bounds that the map is generated in.
+            size: Size of the map to be generated.
+            Currently the side length of square bounds that the map is generated in.
             amount: How many points are generated inside the bounds.
 
         Returns:
@@ -42,7 +53,13 @@ class MapGenerator:
         total_start = time.time()
         random.seed(seed)
         print("Generating points...")
-        points = self.point_generator.generate_points(amount, (-size // 2, -size // 2), (size // 2, size // 2), seed, minimum_distance = 4)
+        points = self.point_generator.generate_points(
+            amount,
+            (-size // 2, -size // 2),
+            (size // 2, size // 2),
+            seed,
+            minimum_distance = 4
+        )
         edges = []
         print("Points generated")
         print("Triangulating points...")

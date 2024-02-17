@@ -10,7 +10,7 @@ class PrimMinSpanningTree:
 
         Args:
             edges: List of edges that the minimum spanning tree is created from.
-        
+
         Returns:
             List of edges contained in the minimum spanning tree.
         """
@@ -27,22 +27,22 @@ class PrimMinSpanningTree:
                 adjacencies[pv1.id] = [pv0]
             else:
                 adjacencies[pv1.id].append(pv0)
-            
+
             if pv0.id not in adjacencies.keys():
                 adjacencies[pv0.id] = [pv1]
             else:
                 adjacencies[pv0.id].append(pv1)
-            
+
             if pv0.id not in edges_dict.keys():
                 edges_dict[pv0.id] = [e]
             else:
                 edges_dict[pv0.id].append(e)
-            
+
             if pv1.id not in edges_dict.keys():
                 edges_dict[pv1.id] = [e]
             else:
                 edges_dict[pv1.id].append(e)
-            
+
         queue : list[Edge] = []
         queue.append(edges[0])
 
@@ -75,4 +75,3 @@ class PrimMinSpanningTree:
                 mst_edges.append(e)
 
         return mst_edges
-        

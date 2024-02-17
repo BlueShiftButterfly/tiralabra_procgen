@@ -11,8 +11,10 @@ class RandomPointDistributor:
 
         Args:
             amount: The number of points to generate.
-            min_bounds: The point located at the south-west corner of a set of bounds encompassing the area in which to generate points.
-            max_bounds: The point located at the north-east corner of a set of bounds encompassing the area in which to generate points.
+            min_bounds: The point located at the south-west corner
+            of a set of bounds encompassing the area in which to generate points.
+            max_bounds: The point located at the north-east corner
+            of a set of bounds encompassing the area in which to generate points.
         """
         points_generated = 0
         if seed is not None:
@@ -27,7 +29,7 @@ class RandomPointDistributor:
                 for p in points:
                     if p.get_distance_to(newp) < minimum_distance:
                         valid_point = False
-                if valid_point == False:
+                if valid_point is False:
                     continue
                 points.append(newp)
                 points_generated += 1

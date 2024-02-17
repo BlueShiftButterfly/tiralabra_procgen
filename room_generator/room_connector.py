@@ -20,12 +20,12 @@ class RoomConnector:
                 adjacencies_mst[pv1.id] = [pv0]
             else:
                 adjacencies_mst[pv1.id].append(pv0)
-            
+
             if pv0.id not in adjacencies_mst.keys():
                 adjacencies_mst[pv0.id] = [pv1]
             else:
                 adjacencies_mst[pv0.id].append(pv1)
-            
+
         for e in triangulation:
             pv0 = e.vertices[0]
             pv1 = e.vertices[1]
@@ -34,16 +34,19 @@ class RoomConnector:
                 edges_dict[pv0.id] = [e]
             else:
                 edges_dict[pv0.id].append(e)
-            
+
             if pv1.id not in edges_dict.keys():
                 edges_dict[pv1.id] = [e]
             else:
                 edges_dict[pv1.id].append(e)
-        
+
         for point_id in adjacencies_mst.keys():
             if len(adjacencies_mst[point_id]) == 1:
                 for e in edges_dict[point_id]:
-                    if e not in diagram and e not in mst and len(adjacencies_mst[e.vertices[0].id]) < 3 and len(adjacencies_mst[e.vertices[1].id]) < 3:
+                    if (e not in diagram and
+                        e not in mst and
+                        len(adjacencies_mst[e.vertices[0].id]) < 3 and
+                        len(adjacencies_mst[e.vertices[1].id]) < 3):
                         c = random.uniform(0, 100)
                         if c < self.dead_end_edge_chance:
                             diagram.append(e)

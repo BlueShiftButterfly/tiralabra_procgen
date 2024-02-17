@@ -12,7 +12,8 @@ class BowyerWatson:
         Triangulates a given set of points using the Bowyer-Watson algorithm.
 
         Args:
-            points: List of points that should be triangulated in tuple format. Multiple points should not occupy the same space.
+            points: List of points that should be triangulated in tuple format.
+            Multiple points should not occupy the same space.
 
         Returns:
             Returns the Delaunay triangulation as a list of edges.
@@ -68,14 +69,17 @@ class BowyerWatson:
                     output.append(e)
 
         return output
-    
+
     def create_supertriangle(self, min_point : Point, max_point : Point) -> Triangle:
         """
-        Creates a triangle encompassing a set of points and the possible circumcircles of triangles made of said points.
+        Creates a triangle encompassing a set of points and the 
+        possible circumcircles of triangles made of said points.
 
         Args:
-            min_point: The point located at the south-west corner of a set of bounds encompassing the points to triangulate.
-            max_point: The point located at the north-east corner of a set of bounds encompassing the points to triangulate.
+            min_point: The point located at the south-west corner
+            of a set of bounds encompassing the points to triangulate.
+            max_point: The point located at the north-east corner
+            of a set of bounds encompassing the points to triangulate.
 
         Returns:
             A triangle encompassing the given bounds.
@@ -88,12 +92,18 @@ class BowyerWatson:
         avg_point = Point((min_point.x+max_point.x)*0.5, (min_point.y+max_point.y)*0.5)
         cc_radius = max(avg_point.get_distance_to(max_point), avg_point.get_distance_to(min_point))
         cc_radius *= size_mult
-        tip = Point(avg_point.x, avg_point.y + cc_radius) 
+        tip = Point(avg_point.x, avg_point.y + cc_radius)
         bottom_point = Point(avg_point.x, avg_point.y - cc_radius)
         height = tip.get_distance_to(bottom_point)
         height_vector_normal_down = ( 1, 0)
         height_vector_normal_up = ( -1, 0)
-        point2 = Point((height_vector_normal_down[0] * height * (2/math.sqrt(3)) * 0.5) + bottom_point.x, height_vector_normal_down[1] * height * (2/math.sqrt(3)) * 0.5 + bottom_point.y)
-        point3 = Point((height_vector_normal_up[0] * height * (2/math.sqrt(3)) * 0.5) + bottom_point.x, height_vector_normal_up[1] * height * (2/math.sqrt(3)) * 0.5 + bottom_point.y)
+        point2 = Point(
+                        (height_vector_normal_down[0] * height * (2/math.sqrt(3)) * 0.5) + bottom_point.x,
+                        height_vector_normal_down[1] * height * (2/math.sqrt(3)) * 0.5 + bottom_point.y
+                    )
+        point3 = Point(
+                        (height_vector_normal_up[0] * height * (2/math.sqrt(3)) * 0.5) + bottom_point.x,
+                        height_vector_normal_up[1] * height * (2/math.sqrt(3)) * 0.5 + bottom_point.y
+                    )
 
         return Triangle([tip, point2, point3])
