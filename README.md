@@ -30,3 +30,5 @@
 [Week 3 Report](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/week3_report.md)
 
 [Week 4 Report](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/week4_report.md)
+
+[Week 5 Report](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/week5report.md)
