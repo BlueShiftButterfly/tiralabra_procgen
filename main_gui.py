@@ -1,12 +1,12 @@
 from engine.engine import Engine
 from pygame import Vector2
-from room_generator.engine_generator import EngineGenerator
+from room_generator.map_generator_visualizer import MapGeneratorVisualizer
 
 def main():
     engine = Engine()
     engine.object_handler.create_camera(Vector2(0,0), engine.renderer.rendering_camera)
     engine.renderer.rendering_camera.zoom = 20
-    eg = EngineGenerator(engine.object_handler)
+    eg = MapGeneratorVisualizer(engine.object_handler)
     engine.object_handler.create_generator_object(eg)
     engine.run()
 
