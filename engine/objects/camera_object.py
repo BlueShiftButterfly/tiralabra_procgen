@@ -8,8 +8,8 @@ class Camera(Object):
         super().__init__(id, position, None)
         self.rendering_camera = camera
         self.speed = 0.2
-        self.min_zoom = 0.2
-        self.max_zoom = 100
+        self.min_zoom = 0.3
+        self.max_zoom = 20
 
     def move(self, direction : Vector2):
         self.position += direction.normalize() * self.speed * self.rendering_camera.zoom

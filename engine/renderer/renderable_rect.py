@@ -14,6 +14,7 @@ class RenderableRect(Renderable):
         self.color = color
         self.border_width = border_width
         self.border_radius = border_radius
+        self.bounding_box = (position, Vector2(position.x + width, position.y + height))
 
     def __cmp___(self, other):
         return super().__cmp___(other)

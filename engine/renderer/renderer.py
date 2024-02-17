@@ -9,7 +9,7 @@ from engine.renderer.renderable_line import RenderableLine
 from engine.renderer.rendering_camera import RenderingCamera
 from engine.renderer.renderable_types import RenderableType
 from engine.renderer.renderable_circle import RenderableCircle
-from engine.renderer.renderable_tilemap import RenderableTilemap
+from engine.renderer.renderable_tilemap import RenderableTilemap, Tile, TileChunk
 
 from engine.renderer.colors import ColorPrefabs
 
@@ -22,6 +22,7 @@ class Renderer:
         self.frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
         self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 24)
+        self.__frame_time = 0
 
     @property
     def rendering_camera(self):
@@ -37,9 +38,16 @@ class Renderer:
         self.__render_queue.extend(renderable_list)
 
     def render(self):
+        fps = self.frame_clock.get_fps()
+        if fps == 0:
+            self.__frame_time = 99999999999
+        else:
+            self.__frame_time = (1 / self.frame_clock.get_fps()) * 1000
         self.__screen.fill((0,0,0))
 
         for rendereable in sorted(self.__render_queue, key=lambda r: r.sorting_layer):
+            if not self.rendering_camera.is_rect_inside_bounds(rendereable.bounding_box[0], rendereable.bounding_box[1]):
+                continue
             if rendereable.type == RenderableType.RECT:
                 self.__render_rect(rendereable)
             if rendereable.type == RenderableType.LINE:
@@ -50,8 +58,10 @@ class Renderer:
                 self.__render_circle(rendereable)
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
-        self.__screen.blit(self.__debug_font.render(str(self.frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 25))
-        self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.total_render_scale),True, ColorPrefabs.WHITE), (15, 45))
+        self.__screen.blit(self.__debug_font.render("FPS: "+str(self.frame_clock.get_fps()),True, ColorPrefabs.WHITE), (15, 25))
+        self.__screen.blit(self.__debug_font.render("Frametime: "+str(self.frame_clock.get_time()),True, ColorPrefabs.WHITE), (15, 45))
+        self.__screen.blit(self.__debug_font.render("Frametime custom: "+str(self.__frame_time),True, ColorPrefabs.WHITE), (15, 65))
+        self.__screen.blit(self.__debug_font.render(str(self.rendering_camera.total_render_scale),True, ColorPrefabs.WHITE), (15, 85))
         self.__screen.blit(self.__debug_font.render("SPACE: generate map     ESC: quit program     W/A/S/D: move camera     Q/E:zoom in/out",True, ColorPrefabs.WHITE), (15, 5))
 
         pygame.display.update()
@@ -91,23 +101,51 @@ class Renderer:
                                 br)
 
     def __render_world_grid(self):
-        size = 200
+        size = 256
         for x in range(-size, size+1):
+            if not self.rendering_camera.is_rect_inside_bounds(Vector2(x-0.1, -size), Vector2(x+0.1, size)):
+                continue
             startpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, -size))
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, size))
             if x == 0:
-                pygame.draw.aaline(self.__screen, ColorPrefabs.GREEN, startpos, endpos)
-            else:
-                pygame.draw.aaline(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+                pygame.draw.line(self.__screen, ColorPrefabs.GREEN, startpos, endpos)
+            elif x % 10 == 0:
+                pygame.draw.line(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+            elif self.rendering_camera.total_render_scale < 0.1:
+                pygame.draw.line(self.__screen, ColorPrefabs.DARK_GRAY, startpos, endpos)
 
         for y in range(-size, size+1):
+            if not self.rendering_camera.is_rect_inside_bounds(Vector2(-size, y-0.1), Vector2(size, y+0.1)):
+                continue
             startpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(-size, y))
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(size, y))
             if y == 0:
-                pygame.draw.aaline(self.__screen, ColorPrefabs.RED, startpos, endpos)
-            else:
-                pygame.draw.aaline(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+                pygame.draw.line(self.__screen, ColorPrefabs.RED, startpos, endpos)
+            elif y % 10 == 0:
+                pygame.draw.line(self.__screen, ColorPrefabs.GRAY, startpos, endpos)
+            elif self.rendering_camera.total_render_scale < 0.1:
+                pygame.draw.line(self.__screen, ColorPrefabs.DARK_GRAY, startpos, endpos)
     
     def __render_tilemap(self, renderable_tilemap : RenderableTilemap):
-        scaled_img_surface = pygame.transform.scale(renderable_tilemap.cached_surface, ((256//self.rendering_camera.total_render_scale), (256//self.rendering_camera.total_render_scale)))
-        self.__screen.blit(scaled_img_surface,self.rendering_camera.world_to_screen_coordinates(Vector2(0, 0)))
+        
+        if renderable_tilemap.update_chunk_cache == True:
+            renderable_tilemap.update_chunk_cache = False
+            for t in renderable_tilemap.tiles:
+                chunk_pos = ((t.x // RenderableTilemap.TILE_CHUNK_SIZE), (t.y // RenderableTilemap.TILE_CHUNK_SIZE))
+                chunk_inside_pos = (t.x % RenderableTilemap.TILE_CHUNK_SIZE, t.y % RenderableTilemap.TILE_CHUNK_SIZE)
+                chunk_key = str(chunk_pos)
+                #print(chunk_inside_pos, (renderable_tilemap.tile_size * chunk_inside_pos[0], renderable_tilemap.tile_size * (renderable_tilemap.TILE_CHUNK_SIZE - chunk_inside_pos[1] -1)))
+                if chunk_key in renderable_tilemap.chunk_cache.keys():
+                    renderable_tilemap.chunk_cache[chunk_key].surface.blit(t.surface, (renderable_tilemap.tile_size * chunk_inside_pos[0], renderable_tilemap.tile_size * (renderable_tilemap.TILE_CHUNK_SIZE - chunk_inside_pos[1] -1)))
+                else:
+                    renderable_tilemap.chunk_cache[chunk_key] = TileChunk(chunk_pos[0], chunk_pos[1], pygame.Surface((RenderableTilemap.TILE_CHUNK_SIZE * renderable_tilemap.tile_size, RenderableTilemap.TILE_CHUNK_SIZE * renderable_tilemap.tile_size)))
+                    renderable_tilemap.chunk_cache[chunk_key].surface.blit(t.surface, (renderable_tilemap.tile_size * chunk_inside_pos[0], renderable_tilemap.tile_size * (renderable_tilemap.TILE_CHUNK_SIZE - chunk_inside_pos[1] -1)))
+
+            print(len(renderable_tilemap.tiles))
+            print(len(renderable_tilemap.chunk_cache))
+        for tc in renderable_tilemap.chunk_cache.values():
+            if not self.rendering_camera.is_rect_inside_bounds(Vector2(tc.x * RenderableTilemap.TILE_CHUNK_SIZE, tc.y * RenderableTilemap.TILE_CHUNK_SIZE), Vector2(tc.x * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE, tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE)):
+                continue
+            #print(Vector2(tc.x + RenderableTilemap.TILE_CHUNK_SIZE, tc.y + RenderableTilemap.TILE_CHUNK_SIZE))
+            scaled_surf = pygame.transform.scale(tc.surface, (RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale, RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale))
+            self.__screen.blit(scaled_surf, self.rendering_camera.world_to_screen_coordinates(Vector2(tc.x * RenderableTilemap.TILE_CHUNK_SIZE, tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE)))

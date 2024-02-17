@@ -15,3 +15,4 @@ class ColorPrefabs:
     BROWN = Color(125, 60, 0)
     GRAY = Color(100, 100, 100)
     CYAN = Color(0, 255, 195)
+    DARK_GRAY = Color(60, 60, 60)

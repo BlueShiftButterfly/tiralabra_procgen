@@ -13,6 +13,7 @@ class RenderableCircle(Renderable):
         self.radius = radius
         self.border_width = border_width
         self.is_filled = is_filled
+        self.bounding_box = (Vector2(self.position.x - radius, self.position.y - radius), Vector2(self.position.x + radius, self.position.y + radius))
 
     def __cmp___(self, other):
         return super().__cmp___(other)

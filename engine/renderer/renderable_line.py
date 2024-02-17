@@ -13,6 +13,7 @@ class RenderableLine(Renderable):
         self.color = color
         self.width = width
         self.anti_aliased = anti_aliased
+        self.bounding_box = (Vector2(min(position.x, end_position.x), min(position.y, end_position.y)), Vector2(max(position.x, end_position.x), max(position.y, end_position.y)))
 
     def __cmp___(self, other):
         return super().__cmp___(other)

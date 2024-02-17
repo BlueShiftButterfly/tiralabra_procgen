@@ -10,8 +10,7 @@ class RenderingCamera:
         self.screen_center = Vector2(self.__screen.get_width()/2, self.__screen.get_height()/2)
         self.__units_per_pixel = 1 / (self.__screen.get_height() / 16)
         self.zoom = 1
-        self.camera_verts_world = self.__get_camera_verts()
-        
+        self.camera_verts_world = self.__get_camera_verts()        
 
     #def __get_units_per_pixel(self):
     #    return self.__upp
@@ -46,3 +45,10 @@ class RenderingCamera:
         screen_coordinates = Vector2(((world_pos.x - self.position.x) / self.total_render_scale) + screen_center.x,
                                         screen_center.y-((world_pos.y - self.position.y) / self.total_render_scale))
         return screen_coordinates
+
+    def is_rect_inside_bounds(self, min_pos : Vector2, max_pos : Vector2):
+        self.camera_verts_world = self.__get_camera_verts()
+        if min_pos.x <= self.camera_verts_world[1].x and max_pos.x >= self.camera_verts_world[3].x and min_pos.y <= self.camera_verts_world[1].y and max_pos.y >= self.camera_verts_world[3].y:
+            return True
+        
+        return False
