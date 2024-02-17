@@ -31,7 +31,7 @@ class MapGenerator:
         total_start = time.time()
         random.seed(seed)
         print("Generating points...")
-        points = self.point_generator.generate_points(amount, (-size, -size), (size, size), seed, minimum_distance = 4)
+        points = self.point_generator.generate_points(amount, (-size // 2, -size // 2), (size // 2, size // 2), seed, minimum_distance = 4)
         edges = []
         print("Points generated")
         print("Triangulating points...")

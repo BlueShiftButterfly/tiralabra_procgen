@@ -40,10 +40,10 @@ class EngineGenerator:
     def create_objects_from_map(self, map : Map):
         size = map.size
 
-        self.object_id_set.append(self.object_handler.create_line(Vector2(size, size), Vector2(-size, size), color=ColorPrefabs.GRAY))
-        self.object_id_set.append(self.object_handler.create_line(Vector2(-size, size), Vector2(-size, -size), color=ColorPrefabs.GRAY))
-        self.object_id_set.append(self.object_handler.create_line(Vector2(-size, -size), Vector2(size, -size), color=ColorPrefabs.GRAY))
-        self.object_id_set.append(self.object_handler.create_line(Vector2(size, -size), Vector2(size, size), color=ColorPrefabs.GRAY))
+        self.object_id_set.append(self.object_handler.create_line(Vector2(size // 2, size // 2), Vector2(-size // 2, size // 2), color=ColorPrefabs.GRAY))
+        self.object_id_set.append(self.object_handler.create_line(Vector2(-size // 2, size // 2), Vector2(-size // 2, -size // 2), color=ColorPrefabs.GRAY))
+        self.object_id_set.append(self.object_handler.create_line(Vector2(-size // 2, -size // 2), Vector2(size // 2, -size // 2), color=ColorPrefabs.GRAY))
+        self.object_id_set.append(self.object_handler.create_line(Vector2(size // 2, -size // 2), Vector2(size // 2, size // 2), color=ColorPrefabs.GRAY))
 
         for edge in map.edges:
             if edge in map.minimum_spanning_tree:
