@@ -6,7 +6,7 @@ Currently this project has unit testing and linting setup, using the unittest an
 ![CI](https://github.com/BlueShiftButterfly/tiralabra_procgen/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen/graph/badge.svg?token=TO1ECLJ9QO)](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen)
 
-Currently only parts of the Bowyer-Watson implementation is unit tested. The graphical components are not tested and will not be in this assignment.
+The graphical components in the engine module are not tested. The room generator module is tested.
 
 ## Running Tests
 
