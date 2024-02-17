@@ -1,10 +1,9 @@
-from pygame import Vector2
-from pygame import Rect, Color
-import pygame
 import os
+from pygame import Vector2
+from pygame import Rect
+import pygame
 from engine.renderer.renderable_types import RenderableType
 from engine.renderer.renderable import Renderable
-from collections import namedtuple
 
 class Tile:
     def __init__(self, x : int, y : int, surface : pygame.Surface) -> None:
@@ -38,6 +37,3 @@ class RenderableTilemap(Renderable):
         self.tile_size = self.tiles[0].surface.get_width()
         self.bounding_box = (Vector2(-size, -size), Vector2(size, size))
         print(self.tile_size)
-
-    def __cmp___(self, other):
-        return super().__cmp___(other)

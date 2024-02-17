@@ -1,12 +1,12 @@
 import threading
 from pygame import Vector2, Color
 from engine.objects.object_handler import ObjectHandler
-from engine.renderer.colors import ColorPrefabs
 from room_generator.map_generator import MapGenerator, Map
 from room_generator.bowyer_watson import BowyerWatson
 from room_generator.prim_mst import PrimMinSpanningTree
 from room_generator.random_point_distributor import RandomPointDistributor
 from room_generator.room_connector import RoomConnector
+from engine.renderer import color_prefabs
 
 class GeneratorThread(threading.Thread):
     """
@@ -63,28 +63,28 @@ class MapGeneratorVisualizer:
             self.object_handler.create_line(
                 Vector2(size // 2, size // 2),
                 Vector2(-size // 2, size // 2),
-                color=ColorPrefabs.GRAY
+                color=color_prefabs.GRAY
                 )
             )
         self.object_id_set.append(
             self.object_handler.create_line(
                 Vector2(-size // 2, size // 2),
                 Vector2(-size // 2, -size // 2),
-                color=ColorPrefabs.GRAY
+                color=color_prefabs.GRAY
                 )
             )
         self.object_id_set.append(
             self.object_handler.create_line(
                 Vector2(-size // 2, -size // 2),
                 Vector2(size // 2, -size // 2),
-                color=ColorPrefabs.GRAY
+                color=color_prefabs.GRAY
                 )
             )
         self.object_id_set.append(
             self.object_handler.create_line(
                 Vector2(size // 2, -size // 2),
                 Vector2(size // 2, size // 2),
-                color=ColorPrefabs.GRAY
+                color=color_prefabs.GRAY
                 )
             )
 
@@ -104,7 +104,7 @@ class MapGeneratorVisualizer:
                 self.object_handler.create_line(
                     Vector2(edge.vertices[0].x, edge.vertices[0].y),
                     Vector2(edge.vertices[1].x, edge.vertices[1].y),
-                    ColorPrefabs.ORANGE
+                    color_prefabs.ORANGE
                     )
                 )
 
@@ -115,7 +115,7 @@ class MapGeneratorVisualizer:
                 self.object_handler.create_line(
                     Vector2(edge.vertices[0].x, edge.vertices[0].y),
                     Vector2(edge.vertices[1].x, edge.vertices[1].y),
-                    ColorPrefabs.YELLOW
+                    color_prefabs.YELLOW
                     )
                 )
 
@@ -123,7 +123,7 @@ class MapGeneratorVisualizer:
             self.object_id_set.append(
                 self.object_handler.create_point(
                     Vector2(point.x, point.y),
-                    ColorPrefabs.RED
+                    color_prefabs.RED
                     )
                 )
 

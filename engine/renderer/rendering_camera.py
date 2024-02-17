@@ -10,13 +10,7 @@ class RenderingCamera:
         self.screen_center = Vector2(self.__screen.get_width()/2, self.__screen.get_height()/2)
         self.__units_per_pixel = 1 / (self.__screen.get_height() / 16)
         self.zoom = 1
-        self.camera_verts_world = self.__get_camera_verts()        
-
-    #def __get_units_per_pixel(self):
-    #    return self.__upp
-    
-    #def __get_pixels_per_unit(self):
-    #    return 1 / self.__get_units_per_pixel()
+        self.camera_verts_world = self.__get_camera_verts()
 
     @property
     def total_render_scale(self):
@@ -24,11 +18,11 @@ class RenderingCamera:
 
     def __get_camera_verts(self):
         screen_verts = [
-                        Vector2(0, 0),
-                        Vector2(self.__screen.get_width(), 0),
-                        Vector2(self.__screen.get_width(), self.__screen.get_height()),
-                        Vector2(0, self.__screen.get_height())
-                        ]
+            Vector2(0, 0),
+            Vector2(self.__screen.get_width(), 0),
+            Vector2(self.__screen.get_width(), self.__screen.get_height()),
+            Vector2(0, self.__screen.get_height())
+            ]
         world_verts = [self.screen_to_world_coordinates(sv) for sv in screen_verts]
         return world_verts
 
@@ -48,7 +42,10 @@ class RenderingCamera:
 
     def is_rect_inside_bounds(self, min_pos : Vector2, max_pos : Vector2):
         self.camera_verts_world = self.__get_camera_verts()
-        if min_pos.x <= self.camera_verts_world[1].x and max_pos.x >= self.camera_verts_world[3].x and min_pos.y <= self.camera_verts_world[1].y and max_pos.y >= self.camera_verts_world[3].y:
+        if (min_pos.x <= self.camera_verts_world[1].x and
+            max_pos.x >= self.camera_verts_world[3].x and
+            min_pos.y <= self.camera_verts_world[1].y and
+            max_pos.y >= self.camera_verts_world[3].y):
             return True
         
         return False

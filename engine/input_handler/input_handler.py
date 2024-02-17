@@ -1,5 +1,5 @@
-import pygame
 import sys
+import pygame
 
 class InputHandler:
     """Input handler is responsible for user input, such as keypresses"""
@@ -41,5 +41,3 @@ class InputHandler:
                     sys.exit()
             else:
                 InputHandler.inputs[kb] = False
-            
-                    

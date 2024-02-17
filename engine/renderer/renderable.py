@@ -1,5 +1,5 @@
-from engine.renderer.renderable_types import RenderableType
 from pygame import Vector2
+from engine.renderer.renderable_types import RenderableType
 
 class Renderable:
     """Base class for all renderable objects. Processed by the renderer in the render queue"""

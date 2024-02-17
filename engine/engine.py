@@ -24,9 +24,10 @@ class Engine:
     def input_handler(self):
         """Read-only reference to the input handler"""
         return self.__input_handler
-    
+
     @property
     def object_handler(self):
+        """Read-only reference to the object handler"""
         return self.__object_handler
 
     def run(self):

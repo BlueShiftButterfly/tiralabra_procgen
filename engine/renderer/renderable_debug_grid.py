@@ -9,6 +9,3 @@ class RenderableDebugGrid(Renderable):
         super().__init__()
         self.type = RenderableType.DEBUG_GRID
         self.bounding_box = (Vector2(-256,-256), Vector2(256,256))
-
-    def __cmp___(self, other):
-        return super().__cmp___(other)
