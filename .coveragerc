@@ -1,5 +1,5 @@
 [run]
-source = engine, room_generator
+source = room_generator
 omit = test/**, main_gui.py
 [coverage:report]
 skip_empty = true
