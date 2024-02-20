@@ -8,7 +8,7 @@ from engine.renderer.renderable_line import RenderableLine
 from engine.renderer.rendering_camera import RenderingCamera
 from engine.renderer.renderable_types import RenderableType
 from engine.renderer.renderable_circle import RenderableCircle
-from engine.renderer.renderable_tilemap import RenderableTilemap, TileChunk
+from engine.renderer.renderable_tilemap import RenderableTilemap
 
 from engine.renderer import color_prefabs
 
@@ -177,48 +177,7 @@ class Renderer:
             elif self.rendering_camera.total_render_scale < 0.1:
                 pygame.draw.line(self.__screen, color_prefabs.DARK_GRAY, startpos, endpos)
 
-    def __render_tilemap(self, renderable_tilemap : RenderableTilemap):      
-        if renderable_tilemap.update_chunk_cache is True:
-            renderable_tilemap.update_chunk_cache = False
-            for t in renderable_tilemap.tiles:
-                chunk_pos = (
-                    (t.x // RenderableTilemap.TILE_CHUNK_SIZE),
-                    (t.y // RenderableTilemap.TILE_CHUNK_SIZE)
-                )
-                chunk_inside_pos = (
-                    t.x % RenderableTilemap.TILE_CHUNK_SIZE,
-                    t.y % RenderableTilemap.TILE_CHUNK_SIZE
-                )
-                chunk_key = str(chunk_pos)
-                if chunk_key in renderable_tilemap.chunk_cache.keys():
-                    renderable_tilemap.chunk_cache[chunk_key].surface.blit(
-                        t.surface,
-                        (
-                            renderable_tilemap.tile_size *
-                            chunk_inside_pos[0],
-                            renderable_tilemap.tile_size *
-                            (renderable_tilemap.TILE_CHUNK_SIZE - chunk_inside_pos[1] - 1)
-                        )
-                    )
-                else:
-                    renderable_tilemap.chunk_cache[chunk_key] = TileChunk(
-                        chunk_pos[0],
-                        chunk_pos[1],
-                        pygame.Surface(
-                            (
-                                RenderableTilemap.TILE_CHUNK_SIZE * renderable_tilemap.tile_size,
-                                RenderableTilemap.TILE_CHUNK_SIZE * renderable_tilemap.tile_size
-                            )
-                        )
-                    )
-                    renderable_tilemap.chunk_cache[chunk_key].surface.blit(
-                        t.surface,
-                        (
-                            renderable_tilemap.tile_size * chunk_inside_pos[0],
-                            renderable_tilemap.tile_size * (renderable_tilemap.TILE_CHUNK_SIZE - chunk_inside_pos[1] -1)
-                        )
-                    )
-
+    def __render_tilemap(self, renderable_tilemap : RenderableTilemap): 
         for tc in renderable_tilemap.chunk_cache.values():
             if (not self.rendering_camera.is_rect_inside_bounds(
                 Vector2(
