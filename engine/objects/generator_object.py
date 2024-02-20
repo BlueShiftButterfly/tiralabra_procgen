@@ -17,7 +17,7 @@ class GeneratorObject(Object):
                 self.generator_object.start_generation()
                 self.__thread_check_timer = 1
 
-    def update(self):
+    def update(self, delta_time : float):
         if self.__thread_check_timer > 0:
             self.__thread_check_timer +=1
         if self.__thread_check_timer > 30:
@@ -35,4 +35,4 @@ class GeneratorObject(Object):
             self.generate()
         if self.input_mod > 15:
             self.input_mod = 0
-        return super().update()
+        return super().update(delta_time)

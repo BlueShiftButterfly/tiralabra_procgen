@@ -129,9 +129,9 @@ class ObjectHandler:
             raise KeyError(f"The given id {object_id} does not exist in the current dict of objects!")
         self.__object_deletion_queue.append(object_id)
 
-    def update_objects(self):
+    def update_objects(self, delta_time : float):
         for object in self.__objects.values():
-            object.update()
+            object.update(delta_time)
 
         self.create_objects_from_creation_queue()
         self.delete_objects_from_deletion_queue()

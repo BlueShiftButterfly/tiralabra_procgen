@@ -18,15 +18,19 @@ class Renderer:
     def __init__(self) -> None:
         self.__render_queue = deque()
         self.set_resolution((1280, 720))
-        self.target_framerate = 60
+        self.target_framerate = 300
         self.frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
         self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 24)
-        self.__frame_time = 0
+        self.__delta_time = 0
 
     @property
     def rendering_camera(self):
         return self.__rendering_camera
+
+    @property
+    def delta_time(self):
+        return self.__delta_time
 
     def set_resolution(self, resolution : tuple):
         self.__screen = pygame.display.set_mode(resolution)
@@ -40,9 +44,9 @@ class Renderer:
     def render(self):
         fps = self.frame_clock.get_fps()
         if fps == 0:
-            self.__frame_time = 99999999999
+            self.__delta_time = 99999999999
         else:
-            self.__frame_time = (1 / self.frame_clock.get_fps()) * 1000
+            self.__delta_time = (1 / self.frame_clock.get_fps())
         self.__screen.fill((0,0,0))
 
         for rendereable in sorted(self.__render_queue, key=lambda r: r.sorting_layer):
@@ -80,7 +84,7 @@ class Renderer:
         )
         self.__screen.blit(
             self.__debug_font.render(
-                "Frametime custom: "+str(self.__frame_time),
+                "Frametime custom: "+str(self.__delta_time),
                 True,
                 color_prefabs.WHITE
             ),

@@ -38,7 +38,7 @@ class Engine:
     def update(self):
         """The main program loop. Runs every frame"""
         self.__input_handler.handle_events()
-        self.__object_handler.update_objects()
+        self.__object_handler.update_objects(self.renderer.delta_time)
         self.__renderer.add_list_to_queue(self.__object_handler.get_rendering_components())
         self.__renderer.render()
 

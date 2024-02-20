@@ -6,6 +6,6 @@ class Object:
         self.id = object_id
         self.renderable_component = renderable_component
 
-    def update(self):
+    def update(self, delta_time : float):
         if self.renderable_component is not None:
             self.renderable_component.position = self.position
