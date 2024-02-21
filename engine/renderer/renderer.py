@@ -185,12 +185,12 @@ class Renderer:
         for tc in renderable_tilemap.chunk_cache.values():
             if (not self.rendering_camera.is_rect_inside_bounds(
                 Vector2(
-                    tc.x * RenderableTilemap.TILE_CHUNK_SIZE,
-                    tc.y * RenderableTilemap.TILE_CHUNK_SIZE
+                    tc.x * RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.x,
+                    tc.y * RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.y
                 ),
                 Vector2(
-                    tc.x * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE,
-                    tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE
+                    tc.x * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.x,
+                    tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.y
                 )
             )):
                 continue
@@ -205,8 +205,8 @@ class Renderer:
                 scaled_surf,
                 self.rendering_camera.world_to_screen_coordinates(
                     Vector2(
-                        tc.x * RenderableTilemap.TILE_CHUNK_SIZE,
-                        tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE
+                        tc.x * RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.x,
+                        tc.y * RenderableTilemap.TILE_CHUNK_SIZE + RenderableTilemap.TILE_CHUNK_SIZE + renderable_tilemap.position.y
                     )
                 )
             )
