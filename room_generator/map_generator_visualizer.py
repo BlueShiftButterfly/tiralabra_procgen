@@ -7,6 +7,8 @@ from room_generator.prim_mst import PrimMinSpanningTree
 from room_generator.random_point_distributor import RandomPointDistributor
 from room_generator.room_connector import RoomConnector
 from engine.renderer import color_prefabs
+from room_generator.grid import Grid
+from engine.resource_loader.sprite_loader import SpriteLoader
 
 class GeneratorThread(threading.Thread):
     """
@@ -30,8 +32,9 @@ class MapGeneratorVisualizer:
     """
     Class handles integration with graphics engine. Creates the map on a separate thread and then visualizes it in engine.
     """
-    def __init__(self, object_handler: ObjectHandler) -> None:
+    def __init__(self, object_handler: ObjectHandler, sprite_loader: SpriteLoader) -> None:
         self.object_handler = object_handler
+        self.sprite_loader = sprite_loader
         self.object_id_set = []
         self.is_generating = False
         self.is_done_generating = True
@@ -126,6 +129,20 @@ class MapGeneratorVisualizer:
                     color_prefabs.RED
                     )
                 )
+        grid = Grid(size)
+        palette = {
+            "room_wall" : self.sprite_loader.sprites["room_wall"],
+            "room_floor" : self.sprite_loader.sprites["room_floor"]
+        }
+        for y in range(-size // 2, size //2):
+            for x in range(-size // 2, size //2):
+                grid.set_cell(x, y, "room_wall")
+        for point in generated_map.points:
+            grid.set_cell(point.x, point.y, "room_floor")
+
+        self.object_id_set.append(
+            self.object_handler.create_tilemap(grid, palette)
+        )
 
     def delete_objects(self):
         for object_id in self.object_id_set:
