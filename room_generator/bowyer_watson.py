@@ -6,6 +6,7 @@ class BowyerWatson:
     Implementation of the Bowyer-Watson algorithm. To triangulate points, use the triangulate_points function.
     """
     # Implementation of pseudocode from https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
+    # Also inspired by https://www.gorillasun.de/blog/bowyer-watson-algorithm-for-delaunay-triangulation/
     # This is an inefficient algorithm with no optimizations
     def triangulate_points(self, points : list[Point]) -> list[Edge]:
         """
