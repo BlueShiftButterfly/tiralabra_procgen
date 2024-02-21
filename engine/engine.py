@@ -12,7 +12,6 @@ class Engine:
         self.__renderer = Renderer()
         self.__input_handler = InputHandler()
         self.__object_handler = ObjectHandler()
-        self.__object_handler.create_camera(Vector2(0,0), self.renderer.rendering_camera)
         self.__loop = True
 
     @property
