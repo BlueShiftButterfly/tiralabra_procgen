@@ -7,7 +7,6 @@ def main():
     engine.object_handler.create_camera(Vector2(0,0), engine.renderer.rendering_camera)
     engine.renderer.rendering_camera.zoom = 20
     engine.object_handler.create_debug_grid()
-    engine.object_handler.create_tilemap()
     eg = MapGeneratorVisualizer(engine.object_handler)
     engine.object_handler.create_generator_object(eg)
     engine.run()

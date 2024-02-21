@@ -8,7 +8,9 @@ from engine.renderer.rendering_camera import RenderingCamera
 from engine.renderer.renderable_tilemap import RenderableTilemap
 from engine.objects.camera_object import Camera
 from engine.objects.generator_object import GeneratorObject
+from engine.objects.tilemap_object import TilemapObject
 from engine.renderer import color_prefabs
+from room_generator.grid import Grid
 
 class ObjectHandler:
     def __init__(self) -> None:
@@ -79,15 +81,17 @@ class ObjectHandler:
         )
         return object_id
 
-    def create_tilemap(self):
+    def create_tilemap(self, grid : Grid, tilemap_palette : dict):
         object_id = self.get_new_uuid()
         self.__object_creation_queue.append(
-            Object(
+            TilemapObject(
                 object_id,
                 Vector2(0,0),
                 RenderableTilemap(
                     Vector2(0,0)
-                )
+                ),
+                grid,
+                tilemap_palette
             )
         )
         return object_id

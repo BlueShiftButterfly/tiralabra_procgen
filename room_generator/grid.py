@@ -5,7 +5,7 @@ class Grid:
             self.cells[y] = {}
             for x in range((-size // 2), (size // 2)):
                 self.cells[y][x] = None
-        self.bounds = ((-size // 2), (-size // 2), (size // 2)-1, (size // 2)-1)
+        self.bounds = (((-size // 2), (-size // 2)), ((size // 2)-1, (size // 2)-1))
 
     def is_cell_in_bounds(self, x : int, y : int):
         return (

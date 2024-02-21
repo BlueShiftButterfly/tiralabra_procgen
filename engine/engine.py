@@ -3,6 +3,7 @@ from pygame import Vector2
 from engine.renderer.renderer import Renderer
 from engine.input_handler.input_handler import InputHandler
 from engine.objects.object_handler import ObjectHandler
+from engine.resource_loader.sprite_loader import SpriteLoader
 
 class Engine:
     """Engine class is the main wrapper of the pygame based game engine. 
@@ -12,6 +13,7 @@ class Engine:
         self.__renderer = Renderer()
         self.__input_handler = InputHandler()
         self.__object_handler = ObjectHandler()
+        self.__sprite_loader = SpriteLoader()
         self.__loop = True
 
     @property
@@ -28,6 +30,10 @@ class Engine:
     def object_handler(self):
         """Read-only reference to the object handler"""
         return self.__object_handler
+
+    @property
+    def sprite_loader(self):
+        return self.__sprite_loader
 
     def run(self):
         """Starts the main loop"""

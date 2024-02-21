@@ -23,6 +23,12 @@ class RenderableTilemap(Renderable):
         self.bounding_box = self.calculate_bounds()
         self.generate_chunks()
 
+    def set_tiles(self, tiles : list[VisualTile]):
+        self.tiles = tiles
+        self.tile_size = self.get_tile_size()
+        self.bounding_box = self.calculate_bounds()
+        self.generate_chunks()
+
     def calculate_bounds(self) -> tuple[Vector2, Vector2]:
         bounding_box = None
         if len(self.tiles) > 0:
@@ -51,7 +57,7 @@ class RenderableTilemap(Renderable):
             )
         return bounding_box
 
-    def get_tile_size(self):
+    def get_tile_size(self) -> int:
         return 32
 
     def generate_chunks(self):
