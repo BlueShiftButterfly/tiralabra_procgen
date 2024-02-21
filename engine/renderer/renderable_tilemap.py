@@ -19,10 +19,6 @@ class RenderableTilemap(Renderable):
         self.update_chunk_cache = True
         self.chunk_cache = {}
         self.tiles = tiles
-        for i in range(30):
-            surf = pygame.Surface((32, 32))
-            surf.fill((255, 0, 0))
-            self.tiles.append(VisualTile(i, 0, surf))
         self.tile_size = self.get_tile_size()
         self.bounding_box = self.calculate_bounds()
         self.generate_chunks()
