@@ -9,12 +9,13 @@ from room_generator.room_connector import RoomConnector
 from engine.renderer import color_prefabs
 from room_generator.grid import Grid
 from engine.resource_loader.sprite_loader import SpriteLoader
+from room_generator.room_placer import RoomPlacer
 
 class GeneratorThread(threading.Thread):
     """
     Custom Thread class used for generating the map on a separate thread.
     """
-    def __init__(self, generator : MapGenerator, seed : int = None, size : int = 64, amount : int = 128):
+    def __init__(self, generator : MapGenerator, seed : int = None, size : int = 256, amount : int = 128):
         threading.Thread.__init__(self, daemon=True)
         self.generator = generator
         self.daemon = True
@@ -43,7 +44,7 @@ class MapGeneratorVisualizer:
     def start_generation(self):
         self.delete_objects()
         print("Starting generation on separate thread")
-        map_generator = MapGenerator(RandomPointDistributor(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        map_generator = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
         self.map_thread = GeneratorThread(map_generator)
         self.map_thread.start()
         self.is_generating = True
@@ -91,29 +92,39 @@ class MapGeneratorVisualizer:
                 )
             )
 
-        for edge in generated_map.edges:
-            if edge in generated_map.minimum_spanning_tree:
-                continue
-            self.object_id_set.append(
-                self.object_handler.create_line(
-                    Vector2(edge.vertices[0].x, edge.vertices[0].y),
-                    Vector2(edge.vertices[1].x, edge.vertices[1].y),
-                    Color(100, 30, 30)
-                    )
-                )
+        palette = {
+            "room_wall" : self.sprite_loader.sprites["room_wall"],
+            "room_floor" : self.sprite_loader.sprites["room_floor"],
+            "empty" : self.sprite_loader.sprites["empty"]
+        }
+        
+        self.object_id_set.append(
+            self.object_handler.create_tilemap(generated_map.grid, palette)
+        )
 
-        for edge in generated_map.minimum_spanning_tree:
-            self.object_id_set.append(
-                self.object_handler.create_line(
-                    Vector2(edge.vertices[0].x, edge.vertices[0].y),
-                    Vector2(edge.vertices[1].x, edge.vertices[1].y),
-                    color_prefabs.ORANGE
-                    )
-                )
+        #for edge in generated_map.edges:
+        #    if edge in generated_map.minimum_spanning_tree:
+        #        continue
+        #    self.object_id_set.append(
+        #        self.object_handler.create_line(
+        #            Vector2(edge.vertices[0].x, edge.vertices[0].y),
+        #            Vector2(edge.vertices[1].x, edge.vertices[1].y),
+        #            Color(100, 30, 30)
+        #            )
+        #        )
+
+        #for edge in generated_map.minimum_spanning_tree:
+        #    self.object_id_set.append(
+        #        self.object_handler.create_line(
+        #            Vector2(edge.vertices[0].x, edge.vertices[0].y),
+        #            Vector2(edge.vertices[1].x, edge.vertices[1].y),
+        #            color_prefabs.ORANGE
+        #            )
+        #        )
 
         for edge in generated_map.map_diagram:
-            if edge in generated_map.minimum_spanning_tree:
-                continue
+            #if edge in generated_map.minimum_spanning_tree:
+            #    continue
             self.object_id_set.append(
                 self.object_handler.create_line(
                     Vector2(edge.vertices[0].x, edge.vertices[0].y),
@@ -129,20 +140,6 @@ class MapGeneratorVisualizer:
                     color_prefabs.RED
                     )
                 )
-        grid = Grid(size)
-        palette = {
-            "room_wall" : self.sprite_loader.sprites["room_wall"],
-            "room_floor" : self.sprite_loader.sprites["room_floor"]
-        }
-        for y in range(-size // 2, size //2):
-            for x in range(-size // 2, size //2):
-                grid.set_cell(x, y, "room_wall")
-        for point in generated_map.points:
-            grid.set_cell(point.x, point.y, "room_floor")
-
-        self.object_id_set.append(
-            self.object_handler.create_tilemap(grid, palette)
-        )
 
     def delete_objects(self):
         for object_id in self.object_id_set:

@@ -1,6 +1,7 @@
 import time
 import random
 from room_generator.geometry import Point, Edge
+from room_generator.grid import Grid
 
 class Map:
     """
@@ -12,13 +13,15 @@ class Map:
             points : list[Point],
             edges : list[Edge],
             minimum_spanning_tree : list[Edge],
-            map_diagram : list[Edge]
+            map_diagram : list[Edge],
+            grid : Grid
         ) -> None:
         self.size = size
         self.points = points
         self.edges = edges
         self.minimum_spanning_tree = minimum_spanning_tree 
         self.map_diagram = map_diagram
+        self.grid = grid
 
 class MapGenerator:
     """
@@ -32,13 +35,13 @@ class MapGenerator:
         min_tree_generator: Generator Class responsible for crating
         a Minimum spanning tree from the Delaunay triangulation.
     """
-    def __init__(self, point_generator, triangulator, min_tree_generator, room_connector) -> None:
-        self.point_generator = point_generator
+    def __init__(self, room_placer, triangulator, min_tree_generator, room_connector) -> None:
+        self.room_placer = room_placer
         self.triangulator = triangulator
         self.min_tree_generator = min_tree_generator
         self.room_connector = room_connector
 
-    def generate(self, seed : int = None, size : int = 50, amount : int = 128) -> Map:
+    def generate(self, seed : int = None, size : int = 64, amount : int = 32) -> Map:
         """
         Generates a map object using given settings.
 
@@ -53,13 +56,25 @@ class MapGenerator:
         total_start = time.time()
         random.seed(seed)
         print("Generating points...")
-        points = self.point_generator.generate_points(
-            amount,
-            (-size // 2, -size // 2),
-            (size // 2, size // 2),
-            seed,
-            minimum_distance = 4
-        )
+        points = []
+        grid = Grid(size)
+        #palette = {
+        #    "room_wall" : self.sprite_loader.sprites["room_wall"],
+        #    "room_floor" : self.sprite_loader.sprites["room_floor"],
+        #    "empty" : self.sprite_loader.sprites["empty"]
+        #}
+        rp = self.room_placer.generate_rooms(amount, grid, seed)
+        rooms = rp[1]
+        new_grid = rp[0]
+        for room in rooms:
+            points.append(room.center_point)
+        #points = self.room_placer.generate_points(
+        #    amount,
+        #    (-size // 2, -size // 2),
+        #    (size // 2, size // 2),
+        #    seed,
+        #    minimum_distance = 4
+        #)
         edges = []
         print("Points generated")
         print("Triangulating points...")
@@ -79,4 +94,4 @@ class MapGenerator:
         total_end = time.time()
         print(f"Map took {total_end-total_start} seconds to generate")
 
-        return Map(size, points, edges, mst, complete_map_diagram)
+        return Map(size, points, edges, mst, complete_map_diagram, new_grid)
