@@ -1,5 +1,5 @@
 """
-Module for generating visualization objects for a generated map on a separate thread.
+Module for generating a map on a separate thread and generating visualization objects for a map.
 """
 
 import threading
