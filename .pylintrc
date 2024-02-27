@@ -339,7 +339,9 @@ good-names=i,
            k,
            ex,
            Run,
-           _
+           _,
+           x, # Used for coordinates. Better than to use a name like position_x
+           y # For coordinates. See above.
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
