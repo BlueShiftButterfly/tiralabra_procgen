@@ -106,10 +106,12 @@ class MapGeneratorVisualizer:
         Creates visual line objects in the engine from a list of edge objects.
         """
         for edge in edge_list:
-            self.object_handler.create_line(
-                Vector2(edge.vertices[0].x, edge.vertices[0].y),
-                Vector2(edge.vertices[1].x, edge.vertices[1].y),
-                color_prefabs.YELLOW
+            self.object_id_set.append(
+                self.object_handler.create_line(
+                    Vector2(edge.vertices[0].x, edge.vertices[0].y),
+                    Vector2(edge.vertices[1].x, edge.vertices[1].y),
+                    color_prefabs.YELLOW
+                )
             )
 
     def create_point_objects_from_list(self, point_list : list[Point]):
