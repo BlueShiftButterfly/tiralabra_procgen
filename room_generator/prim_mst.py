@@ -14,6 +14,9 @@ class PrimMinSpanningTree:
         Returns:
             List of edges contained in the minimum spanning tree.
         """
+        if len(edges) <= 0:
+            return []
+
         adjacencies = {}
         edges_dict = {}
         visited = set()
@@ -57,16 +60,16 @@ class PrimMinSpanningTree:
             for potential_edge in edges_dict[edge.vertices[0].point_id]:
                 if potential_edge == edge:
                     continue
-                if potential_edge.vertices[0].id in visited and potential_edge.vertices[1].id not in visited:
+                if potential_edge.vertices[0].point_id in visited and potential_edge.vertices[1].point_id not in visited:
                     queue.append(potential_edge)
-                if potential_edge.vertices[1].id in visited and potential_edge.vertices[0].id not in visited:
+                if potential_edge.vertices[1].point_id in visited and potential_edge.vertices[0].point_id not in visited:
                     queue.append(potential_edge)
             for potential_edge in edges_dict[edge.vertices[1].point_id]:
                 if potential_edge == edge:
                     continue
-                if potential_edge.vertices[0].id in visited and potential_edge.vertices[1].id not in visited:
+                if potential_edge.vertices[0].point_id in visited and potential_edge.vertices[1].point_id not in visited:
                     queue.append(potential_edge)
-                if potential_edge.vertices[1].id in visited and potential_edge.vertices[0].id not in visited:
+                if potential_edge.vertices[1].point_id in visited and potential_edge.vertices[0].point_id not in visited:
                     queue.append(potential_edge)
 
         mst_edges = []

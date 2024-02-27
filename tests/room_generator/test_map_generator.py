@@ -5,12 +5,12 @@ from room_generator.geometry import Point, Edge
 from room_generator.bowyer_watson import BowyerWatson
 from room_generator.prim_mst import PrimMinSpanningTree
 from room_generator.room_connector import RoomConnector
-from room_generator.random_point_distributor import RandomPointDistributor
+from room_generator.room_placer import RoomPlacer
 
 class TestMapGenerator(unittest.TestCase):
     def test_map_generator_outputs_empty_diagram_with_empty_points(self):
-        point_generator_mock = Mock()
-        point_generator_mock.generate_points.return_value = []
+        room_generator_mock = Mock()
+        room_generator_mock.generate_rooms.return_value = ([], [])
         triangulator_mock = Mock()
         triangulator_mock.triangulate_points.return_value = []
         min_tree_generator_mock = Mock()
@@ -18,14 +18,14 @@ class TestMapGenerator(unittest.TestCase):
         room_connector_mock = Mock()
         room_connector_mock.create_connections.return_value = []
 
-        mg = MapGenerator(point_generator_mock, triangulator_mock, min_tree_generator_mock, room_connector_mock)
+        mg = MapGenerator(room_generator_mock, triangulator_mock, min_tree_generator_mock, room_connector_mock)
         result = mg.generate().map_diagram
         expected = []
         self.assertEqual(result, expected)
 
     def test_map_generator_outputs_correct_diagram(self):
-        point_generator_mock = Mock()
-        point_generator_mock.generate_points.return_value = []
+        room_generator_mock = Mock()
+        room_generator_mock.generate_rooms.return_value = ([], [])
         triangulator_mock = Mock()
         triangulator_mock.triangulate_points.return_value = []
         min_tree_generator_mock = Mock()
@@ -36,14 +36,14 @@ class TestMapGenerator(unittest.TestCase):
         room_connector_mock = Mock()
         room_connector_mock.create_connections.return_value = [Edge((point1, point2)), Edge((point2, point3)), Edge((point1, point3))]
 
-        mg = MapGenerator(point_generator_mock, triangulator_mock, min_tree_generator_mock, room_connector_mock)
+        mg = MapGenerator(room_generator_mock, triangulator_mock, min_tree_generator_mock, room_connector_mock)
         result = mg.generate().map_diagram
         expected = [Edge((point1, point2)), Edge((point2, point3)), Edge((point1, point3))]
         self.assertEqual(result, expected)
 
     def test_map_generator_outputs_equal_map_diagrams_same_parameters(self):
-        mg1 = MapGenerator(RandomPointDistributor(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        mg1 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
         map1 = mg1.generate(10, 32, 16)
-        mg2 = MapGenerator(RandomPointDistributor(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        mg2 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
         map2 = mg2.generate(10, 32, 16)
         self.assertEqual(map1.map_diagram, map2.map_diagram)
