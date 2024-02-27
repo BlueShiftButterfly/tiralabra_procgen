@@ -1,5 +1,6 @@
 """
-Module for generating a map on a separate thread and generating visualization objects for a map.
+Module for generating a map on a separate thread
+and generating visualization objects for a map.
 """
 
 import threading
@@ -19,7 +20,13 @@ class GeneratorThread(threading.Thread):
     """
     Custom Thread class used for generating the map on a separate thread.
     """
-    def __init__(self, generator : MapGenerator, seed : int = None, size : int = 256, amount : int = 128):
+    def __init__(
+            self,
+            generator: MapGenerator,
+            seed: int = None,
+            size: int = 256,
+            amount: int = 128
+        ):
         threading.Thread.__init__(self, daemon=True)
         self.generator = generator
         self.daemon = True
@@ -30,15 +37,24 @@ class GeneratorThread(threading.Thread):
 
     def run(self) -> None:
         print("THREAD: Started generating")
-        self.generated_map = self.generator.generate(self.seed, self.size, self.amount)
+        self.generated_map = self.generator.generate(
+            self.seed,
+            self.size,
+            self.amount
+        )
         print("THREAD: Done generating")
 
 class MapGeneratorVisualizer:
     """
     Class handles integration with graphics engine.
-    Creates the map on a separate thread and then visualizes it in engine.
+    Creates the map on a separate thread
+    and then visualizes it in engine.
     """
-    def __init__(self, object_handler: ObjectHandler, sprite_loader: SpriteLoader) -> None:
+    def __init__(
+            self,
+            object_handler: ObjectHandler,
+            sprite_loader: SpriteLoader
+        ) -> None:
         self.object_handler = object_handler
         self.sprite_loader = sprite_loader
         self.object_id_set = []
@@ -51,7 +67,12 @@ class MapGeneratorVisualizer:
         """
         self.delete_objects()
         print("Starting generation on separate thread")
-        map_generator = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        map_generator = MapGenerator(
+            RoomPlacer(),
+            BowyerWatson(),
+            PrimMinSpanningTree(),
+            RoomConnector()
+        )
         self.map_thread = GeneratorThread(map_generator)
         self.map_thread.start()
         self.is_generating = True
@@ -116,7 +137,8 @@ class MapGeneratorVisualizer:
 
     def create_point_objects_from_list(self, point_list : list[Point]):
         """
-        Creates visual point objects in the engine from a list of point objects.
+        Creates visual point objects in the engine
+        from a list of point objects.
         """
         for point in point_list:
             self.object_id_set.append(
