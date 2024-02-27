@@ -16,29 +16,29 @@ class RoomConnector:
             pv0 = e.vertices[0]
             pv1 = e.vertices[1]
 
-            if pv1.id not in adjacencies_mst.keys():
-                adjacencies_mst[pv1.id] = [pv0]
+            if pv1.point_id not in adjacencies_mst.keys():
+                adjacencies_mst[pv1.point_id] = [pv0]
             else:
-                adjacencies_mst[pv1.id].append(pv0)
+                adjacencies_mst[pv1.point_id].append(pv0)
 
-            if pv0.id not in adjacencies_mst.keys():
-                adjacencies_mst[pv0.id] = [pv1]
+            if pv0.point_id not in adjacencies_mst.keys():
+                adjacencies_mst[pv0.point_id] = [pv1]
             else:
-                adjacencies_mst[pv0.id].append(pv1)
+                adjacencies_mst[pv0.point_id].append(pv1)
 
         for e in triangulation:
             pv0 = e.vertices[0]
             pv1 = e.vertices[1]
 
-            if pv0.id not in edges_dict.keys():
-                edges_dict[pv0.id] = [e]
+            if pv0.point_id not in edges_dict.keys():
+                edges_dict[pv0.point_id] = [e]
             else:
-                edges_dict[pv0.id].append(e)
+                edges_dict[pv0.point_id].append(e)
 
-            if pv1.id not in edges_dict.keys():
-                edges_dict[pv1.id] = [e]
+            if pv1.point_id not in edges_dict.keys():
+                edges_dict[pv1.point_id] = [e]
             else:
-                edges_dict[pv1.id].append(e)
+                edges_dict[pv1.point_id].append(e)
 
         for point_id in adjacencies_mst.keys():
             if len(adjacencies_mst[point_id]) == 1:
