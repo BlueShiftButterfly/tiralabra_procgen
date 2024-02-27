@@ -58,23 +58,11 @@ class MapGenerator:
         print("Generating points...")
         points = []
         grid = Grid(size)
-        #palette = {
-        #    "room_wall" : self.sprite_loader.sprites["room_wall"],
-        #    "room_floor" : self.sprite_loader.sprites["room_floor"],
-        #    "empty" : self.sprite_loader.sprites["empty"]
-        #}
         rp = self.room_placer.generate_rooms(amount, grid, seed)
         rooms = rp[1]
         new_grid = rp[0]
         for room in rooms:
             points.append(room.center_point)
-        #points = self.room_placer.generate_points(
-        #    amount,
-        #    (-size // 2, -size // 2),
-        #    (size // 2, size // 2),
-        #    seed,
-        #    minimum_distance = 4
-        #)
         edges = []
         print("Points generated")
         print("Triangulating points...")
@@ -82,16 +70,12 @@ class MapGenerator:
         edges = self.triangulator.triangulate_points(points)
         endtime = time.time()
         print(f"Creating triangulation of {len(edges)} edges for {len(points)} vertices took {endtime-starttime} seconds")
-
         print("Creating Minimum Spanning Tree for triangulation...")
         starttime = time.time()
         mst = self.min_tree_generator.create_tree_from_edges(edges)
         endtime = time.time()
         print(f"Creating MST for {len(points)} vertices with {len(mst)} edges took {endtime-starttime} seconds")
-
         complete_map_diagram = self.room_connector.create_connections(seed, mst, edges)
-        
         total_end = time.time()
         print(f"Map took {total_end-total_start} seconds to generate")
-
         return Map(size, points, edges, mst, complete_map_diagram, new_grid)
