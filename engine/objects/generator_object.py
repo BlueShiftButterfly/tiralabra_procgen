@@ -14,7 +14,7 @@ class GeneratorObject(Object):
     def generate(self):
         if self.generator_object is not None:
             if self.generator_object.is_generating is False:
-                self.generator_object.start_generation()
+                self.generator_object.start_generation_thread()
                 self.__thread_check_timer = 1
 
     def update(self, delta_time : float):
@@ -26,7 +26,7 @@ class GeneratorObject(Object):
             else:
                 self.__thread_check_timer = 1
         if self.generator_object.is_generating and self.__thread_check_timer == 1:
-            self.generator_object.check_generation()
+            self.generator_object.update_generation_thread_status()
         if self.input_mod > 0:
             self.input_mod +=1
         if InputHandler.inputs["space"] and self.generator_object.is_generating is False:
