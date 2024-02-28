@@ -11,8 +11,6 @@ class Room:
 
 class RoomPlacer:
     def generate_rooms(self, amount, grid: Grid, seed : int = None):
-        room_min_area = 10
-        room_max_area = 25
         room_min_width = 5
         room_max_width = 20
         min_room_buffer_distance = 4
@@ -77,5 +75,4 @@ class RoomPlacer:
                             y + room_position.y - (room_height // 2),
                             "room_floor"
                         )
-        print(len(rooms))
         return (new_grid, rooms)

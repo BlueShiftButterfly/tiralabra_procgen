@@ -36,13 +36,11 @@ class GeneratorThread(threading.Thread):
         self.amount = amount
 
     def run(self) -> None:
-        print("THREAD: Started generating")
         self.generated_map = self.generator.generate(
             self.seed,
             self.size,
             self.amount
         )
-        print("THREAD: Done generating")
 
 class MapGeneratorVisualizer:
     """
@@ -66,7 +64,6 @@ class MapGeneratorVisualizer:
         Starts a separate thread for generating a map.
         """
         self.delete_objects()
-        print("Starting generation on separate thread")
         map_generator = MapGenerator(
             RoomPlacer(),
             BowyerWatson(),
@@ -95,9 +92,7 @@ class MapGeneratorVisualizer:
         self.is_generating = False
         self.map_thread.join()
         generated_map = self.map_thread.generated_map
-        print("Generator thread concluded")
         self.create_objects_from_map(generated_map)
-        print("Created visualization objects")
 
     def create_objects_from_map(self, generated_map : Map):
         """

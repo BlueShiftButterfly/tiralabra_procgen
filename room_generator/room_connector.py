@@ -45,8 +45,8 @@ class RoomConnector:
                 for e in edges_dict[point_id]:
                     if (e not in diagram and
                         e not in mst and
-                        len(adjacencies_mst[e.vertices[0].id]) < 3 and
-                        len(adjacencies_mst[e.vertices[1].id]) < 3):
+                        len(adjacencies_mst[e.vertices[0].point_id]) < 3 and
+                        len(adjacencies_mst[e.vertices[1].point_id]) < 3):
                         c = random.uniform(0, 100)
                         if c < self.dead_end_edge_chance:
                             diagram.append(e)
