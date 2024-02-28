@@ -1,80 +1,130 @@
+"""
+Module implementing prim's algorithm
+for generating a minimum spanning tree.
+"""
+
 from room_generator.geometry import Edge
 
 class PrimMinSpanningTree:
     """
-    Implementation of Prim's algorithm. Used to generate a minimum spanning tree.
+    Implementation of Prim's algorithm.
+    Used to generate a minimum spanning tree.
     """
-    def create_tree_from_edges(self, edges : list[Edge]) -> list[Edge]:
+    def create_tree_from_edges(
+            self,
+            triangulation_edges: list[Edge]
+        ) -> list[Edge]:
         """
-        Generates a minimum spanning tree from a list of given edges.
+        Generates a minimum spanning tree from a list of given edges
+        that form a Delaunay triangulation.
 
         Args:
-            edges: List of edges that the minimum spanning tree is created from.
+            edges: List of edges that
+            the minimum spanning tree is created from.
 
         Returns:
             List of edges contained in the minimum spanning tree.
         """
-        if len(edges) <= 0:
+        if len(triangulation_edges) == 0:
             return []
 
-        adjacencies = {}
-        edges_dict = {}
-        visited = set()
-        edge_forest = set()
-
-        for e in edges:
-            pv0 = e.vertices[0]
-            pv1 = e.vertices[1]
-
-            if pv1.point_id not in adjacencies.keys():
-                adjacencies[pv1.point_id] = [pv0]
-            else:
-                adjacencies[pv1.point_id].append(pv0)
-
-            if pv0.point_id not in adjacencies.keys():
-                adjacencies[pv0.point_id] = [pv1]
-            else:
-                adjacencies[pv0.point_id].append(pv1)
-
-            if pv0.point_id not in edges_dict.keys():
-                edges_dict[pv0.point_id] = [e]
-            else:
-                edges_dict[pv0.point_id].append(e)
-
-            if pv1.point_id not in edges_dict.keys():
-                edges_dict[pv1.point_id] = [e]
-            else:
-                edges_dict[pv1.point_id].append(e)
+        visited_vertex_ids = set()
+        edge_id_forest = set()
+        points_edge_references = self.get_point_edge_references(
+            triangulation_edges
+        )
 
         queue : list[Edge] = []
-        queue.append(edges[0])
+        queue.append(triangulation_edges[0])
 
         while len(queue) > 0:
             queue.sort(key=lambda e : e.get_length(), reverse=True)
             edge = queue.pop()
-            if edge.vertices[0].point_id in visited and edge.vertices[1].point_id in visited:
+
+            if (
+                edge.vertices[0].point_id in visited_vertex_ids and
+                edge.vertices[1].point_id in visited_vertex_ids
+            ):
                 continue
-            edge_forest.add(edge.edge_id)
-            visited.add(edge.vertices[0].point_id)
-            visited.add(edge.vertices[1].point_id)
-            for potential_edge in edges_dict[edge.vertices[0].point_id]:
-                if potential_edge == edge:
-                    continue
-                if potential_edge.vertices[0].point_id in visited and potential_edge.vertices[1].point_id not in visited:
-                    queue.append(potential_edge)
-                if potential_edge.vertices[1].point_id in visited and potential_edge.vertices[0].point_id not in visited:
-                    queue.append(potential_edge)
-            for potential_edge in edges_dict[edge.vertices[1].point_id]:
-                if potential_edge == edge:
-                    continue
-                if potential_edge.vertices[0].point_id in visited and potential_edge.vertices[1].point_id not in visited:
-                    queue.append(potential_edge)
-                if potential_edge.vertices[1].point_id in visited and potential_edge.vertices[0].point_id not in visited:
-                    queue.append(potential_edge)
+
+            edge_id_forest.add(edge.edge_id)
+            visited_vertex_ids.add(edge.vertices[0].point_id)
+            visited_vertex_ids.add(edge.vertices[1].point_id)
+            queue.extend(
+                self.get_potential_unvisited_edges(
+                    points_edge_references[edge.vertices[0].point_id],
+                    visited_vertex_ids,
+                    edge
+                )
+            )
+            queue.extend(
+                self.get_potential_unvisited_edges(
+                    points_edge_references[edge.vertices[1].point_id],
+                    visited_vertex_ids,
+                    edge
+                )
+            )
 
         mst_edges = []
-        for e in edges:
-            if e.edge_id in edge_forest:
-                mst_edges.append(e)
+        for edge in triangulation_edges:
+            if edge.edge_id in edge_id_forest:
+                mst_edges.append(edge)
 
         return mst_edges
+
+    def get_point_edge_references(
+            self,
+            edges: list[Edge]
+        ) -> dict:
+        """
+        Creates a dictionary of point ids and
+        edges to which said points are connected to.
+
+        Args:
+            edges: List of edges to create references from.
+
+        Returns:
+            A dictionary with a point ids as keys
+            and a list of edges as values.
+        """
+        point_edge_references = {}
+        for edge in edges:
+            point_edge_references[edge.vertices[0].point_id] = []
+            point_edge_references[edge.vertices[1].point_id] = []
+
+        for edge in edges:
+            point_edge_references[edge.vertices[0].point_id].append(edge)
+            point_edge_references[edge.vertices[1].point_id].append(edge)
+
+        return point_edge_references
+
+    def get_potential_unvisited_edges(
+            self,
+            edges: list[Edge],
+            visited_point_ids: set,
+            current_edge: Edge
+        ):
+        """
+        Creates a list of edges that contain unvisited points.
+
+        Args:
+            edges: List of edges to check for potentially
+            unvisited points.
+            visited_point_ids: Set of point ids that
+            have been visited in prim's algorithm.
+            current_edge: The currently evaluated edge that should
+            be ignored for new potential edges.
+
+        Returns:
+            List of edges that contain unvisited points.
+        """
+        potential_edges = []
+        for potential_edge in edges:
+            if potential_edge == current_edge:
+                continue
+            if (
+                potential_edge.vertices[0].point_id not in visited_point_ids or
+                potential_edge.vertices[1].point_id not in visited_point_ids
+            ):
+                potential_edges.append(potential_edge)
+        return potential_edges
