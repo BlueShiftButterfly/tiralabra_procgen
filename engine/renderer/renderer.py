@@ -197,8 +197,8 @@ class Renderer:
             scaled_surf = pygame.transform.scale(
                 tc.surface,
                 (
-                    RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale,
-                    RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale
+                    RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale+1,
+                    RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale+1
                 )
             )
             self.__screen.blit(
