@@ -11,9 +11,7 @@ from engine.resource_loader.sprite_loader import SpriteLoader
 from room_generator.geometry import Point, Edge
 from room_generator.grid import Grid
 from room_generator.map_generator import MapGenerator, Map
-from room_generator.bowyer_watson import BowyerWatson
-from room_generator.prim_mst import PrimMinSpanningTree
-from room_generator.room_connector import RoomConnector
+from room_generator.undirected_graphing import BowyerWatson, RandomEdgeConnector, PrimMinSpanningTree
 from room_generator.room_placer import RoomPlacer
 
 class GeneratorThread(threading.Thread):
@@ -68,7 +66,7 @@ class MapGeneratorVisualizer:
             RoomPlacer(),
             BowyerWatson(),
             PrimMinSpanningTree(),
-            RoomConnector()
+            RandomEdgeConnector()
         )
         self.map_thread = GeneratorThread(map_generator)
         self.map_thread.start()

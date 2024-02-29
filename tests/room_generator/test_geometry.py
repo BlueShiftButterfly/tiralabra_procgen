@@ -1,5 +1,5 @@
 import unittest
-from room_generator.bowyer_watson import Point, Edge, Triangle, BowyerWatson
+from room_generator.geometry import Point, Edge, Triangle
 
 class TestBowyerWatsonPoint(unittest.TestCase):
     def test_point_distance_nonzero(self):

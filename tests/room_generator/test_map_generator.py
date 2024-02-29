@@ -1,10 +1,8 @@
 import unittest
 from unittest.mock import Mock
-from room_generator.map_generator import Map, MapGenerator
+from room_generator.map_generator import MapGenerator
 from room_generator.geometry import Point, Edge
-from room_generator.bowyer_watson import BowyerWatson
-from room_generator.prim_mst import PrimMinSpanningTree
-from room_generator.room_connector import RoomConnector
+from room_generator.undirected_graphing import BowyerWatson, PrimMinSpanningTree, RandomEdgeConnector
 from room_generator.room_placer import RoomPlacer
 
 class TestMapGenerator(unittest.TestCase):
@@ -42,8 +40,8 @@ class TestMapGenerator(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_map_generator_outputs_equal_map_diagrams_same_parameters(self):
-        mg1 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        mg1 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RandomEdgeConnector())
         map1 = mg1.generate(10, 32, 16)
-        mg2 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RoomConnector())
+        mg2 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RandomEdgeConnector())
         map2 = mg2.generate(10, 32, 16)
         self.assertEqual(map1.map_diagram, map2.map_diagram)

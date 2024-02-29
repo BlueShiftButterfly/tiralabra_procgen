@@ -1,5 +1,5 @@
 import unittest
-from room_generator.prim_mst import PrimMinSpanningTree
+from room_generator.undirected_graphing import PrimMinSpanningTree
 from room_generator.geometry import Point, Edge
 
 class TestPrimMinSpanningTree(unittest.TestCase):

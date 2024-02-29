@@ -1,5 +1,6 @@
 import unittest
-from room_generator.bowyer_watson import Point, Edge, Triangle, BowyerWatson
+from room_generator.undirected_graphing import BowyerWatson
+from room_generator.geometry import Point, Edge
 
 class TestBowyerWatson(unittest.TestCase):
     def test_triangulate_three_valid_points(self):
