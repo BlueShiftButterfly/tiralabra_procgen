@@ -59,6 +59,8 @@ class BowyerWatson:
         Returns:
             Returns the Delaunay triangulation as a list of edges.
         """
+        if len(points) <= 1:
+            return []
         points_to_triangulate = points
         bounds_max_point = points[0]
         bounds_min_point = points[1]
