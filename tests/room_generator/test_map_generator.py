@@ -41,7 +41,7 @@ class TestMapGenerator(unittest.TestCase):
 
     def test_map_generator_outputs_equal_map_diagrams_same_parameters(self):
         mg1 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RandomEdgeConnector())
-        map1 = mg1.generate(10, 32, 16)
+        map1 = mg1.generate(10, 128, 16)
         mg2 = MapGenerator(RoomPlacer(), BowyerWatson(), PrimMinSpanningTree(), RandomEdgeConnector())
-        map2 = mg2.generate(10, 32, 16)
+        map2 = mg2.generate(10, 128, 16)
         self.assertEqual(map1.map_diagram, map2.map_diagram)
