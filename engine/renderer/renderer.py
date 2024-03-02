@@ -23,6 +23,7 @@ class Renderer:
         self.__rendering_camera = RenderingCamera(self.__screen)
         self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 24)
         self.__delta_time = 0
+        self.draw_calls = 0
 
     @property
     def rendering_camera(self):
@@ -42,6 +43,7 @@ class Renderer:
         self.__render_queue.extend(renderable_list)
 
     def render(self):
+        self.draw_calls = 0
         fps = self.frame_clock.get_fps()
         if fps == 0:
             self.__delta_time = 99999999999
@@ -100,6 +102,14 @@ class Renderer:
         )
         self.__screen.blit(
             self.__debug_font.render(
+                "Draw calls: "+str(self.draw_calls),
+                True,
+                color_prefabs.WHITE
+            ),
+            (15, 105)
+        )
+        self.__screen.blit(
+            self.__debug_font.render(
                 "SPACE: generate map     ESC: quit program     W/A/S/D: move camera     Q/E:zoom in/out",
                 True,
                 color_prefabs.WHITE
@@ -112,6 +122,7 @@ class Renderer:
         self.frame_clock.tick_busy_loop(self.target_framerate)
 
     def __render_rect(self, rendereable_rect : RenderableRect):
+        self.draw_calls += 1
         screen_position = self.rendering_camera.world_to_screen_coordinates(rendereable_rect.position)
         return pygame.draw.rect(
             self.__screen,
@@ -127,6 +138,7 @@ class Renderer:
         )
 
     def __render_line(self, renderable_line : RenderableLine):
+        self.draw_calls += 1
         if renderable_line.anti_aliased:
             return pygame.draw.aaline(
                 self.__screen,
@@ -144,6 +156,7 @@ class Renderer:
         )
 
     def __render_circle(self, renderable_circle : RenderableCircle):
+        self.draw_calls += 1
         br = int(max(1, renderable_circle.border_width / self.rendering_camera.total_render_scale))
         if renderable_circle.is_filled:
             br = 0
@@ -164,10 +177,13 @@ class Renderer:
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(x, size))
             if x == 0:
                 pygame.draw.line(self.__screen, color_prefabs.GREEN, startpos, endpos)
+                self.draw_calls += 1
             elif x % 10 == 0:
                 pygame.draw.line(self.__screen, color_prefabs.GRAY, startpos, endpos)
+                self.draw_calls += 1
             elif self.rendering_camera.total_render_scale < 0.1:
                 pygame.draw.line(self.__screen, color_prefabs.DARK_GRAY, startpos, endpos)
+                self.draw_calls += 1
 
         for y in range(-size, size+1):
             if not self.rendering_camera.is_rect_inside_bounds(Vector2(-size, y-0.1), Vector2(size, y+0.1)):
@@ -176,10 +192,13 @@ class Renderer:
             endpos = self.__rendering_camera.world_to_screen_coordinates(Vector2(size, y))
             if y == 0:
                 pygame.draw.line(self.__screen, color_prefabs.RED, startpos, endpos)
+                self.draw_calls += 1
             elif y % 10 == 0:
                 pygame.draw.line(self.__screen, color_prefabs.GRAY, startpos, endpos)
+                self.draw_calls += 1
             elif self.rendering_camera.total_render_scale < 0.1:
                 pygame.draw.line(self.__screen, color_prefabs.DARK_GRAY, startpos, endpos)
+                self.draw_calls += 1
 
     def __render_tilemap(self, renderable_tilemap : RenderableTilemap): 
         for tc in renderable_tilemap.chunk_cache.values():
@@ -201,6 +220,7 @@ class Renderer:
                     RenderableTilemap.TILE_CHUNK_SIZE // self.rendering_camera.total_render_scale+1
                 )
             )
+            self.draw_calls += 1
             self.__screen.blit(
                 scaled_surf,
                 self.rendering_camera.world_to_screen_coordinates(
