@@ -22,6 +22,8 @@ jobs:
         run: pip install poetry
       - name: Install dependencies
         run: poetry install
+      - name: Run Pylint
+        run: poetry run pylint room_generator --fail-under=10
       - name: Run tests
         run: poetry run coverage run --branch -m unittest discover
       - name: Coverage report
