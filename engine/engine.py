@@ -12,7 +12,7 @@ class Engine:
         All engine functionality initialized here, also runs main loop"""
     def __init__(self, render_resolution: tuple[int, int] = (1280, 720), target_fps: int = 120, pygame_render_flags = 0, draw_debug_text: bool = False) -> None:
         pygame.init()
-        self.__ui_handler = UIHandler()
+        self.__ui_handler = UIHandler(render_resolution)
         self.__event_handler = EventHandler(ui_handler_reference=self.__ui_handler)
         self.__renderer = Renderer(
             render_resolution=render_resolution,

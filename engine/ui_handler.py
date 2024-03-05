@@ -2,8 +2,8 @@ import pygame
 import pygame_gui
 
 class UIHandler:
-    def __init__(self) -> None:
-        self.ui_manager = pygame_gui.UIManager((1280, 720))
+    def __init__(self, resolution) -> None:
+        self.ui_manager = pygame_gui.UIManager(resolution)
         self.generator_reference = None
         self.map_size_text_label = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect((-232, 64), (200, 32)),
