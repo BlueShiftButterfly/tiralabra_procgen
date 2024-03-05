@@ -18,6 +18,7 @@ class ObjectHandler:
         self.__object_creation_queue = []
         self.__object_deletion_queue = []
         self.__builting_camera_id = "MAIN_CAMERA"
+        self.loading = False
 
     def get_new_uuid(self) -> str:
         return str(uuid.uuid4())

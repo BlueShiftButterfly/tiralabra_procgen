@@ -92,7 +92,6 @@ class MapGenerator:
             mst,
             triangulation_edges
         )
-        print("POINTS", len(points))
         self.pather.paths_for_rooms(rooms, complete_map_diagram)
         for y in range((-size // 2), (size // 2)):
             for x in range((-size // 2), (size // 2)):

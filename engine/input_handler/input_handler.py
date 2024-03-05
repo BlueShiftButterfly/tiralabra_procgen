@@ -26,12 +26,8 @@ class InputHandler:
             "space" : pygame.K_SPACE
         }
 
-    def handle_events(self):
+    def handle_input(self):
         """Main input loop to handle all pygame user input events"""
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
         pressed = pygame.key.get_pressed()
         for kb in self.keybinds.keys():
             if pressed[self.keybinds[kb]]:

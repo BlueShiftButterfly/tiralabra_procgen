@@ -57,7 +57,7 @@ class MapGeneratorVisualizer:
         self.is_generating = False
         self.map_thread = None
 
-    def start_generation_thread(self) -> None:
+    def start_generation_thread(self, seed: int = None, size: int = 256, amount: int = 64) -> None:
         """
         Starts a separate thread for generating a map.
         """
@@ -68,9 +68,10 @@ class MapGeneratorVisualizer:
             PrimMinSpanningTree(),
             RandomEdgeConnector()
         )
-        self.map_thread = GeneratorThread(map_generator)
+        self.map_thread = GeneratorThread(map_generator, seed=seed, size=size, amount=amount)
         self.map_thread.start()
         self.is_generating = True
+        self.object_handler.loading = True
 
     def update_generation_thread_status(self) -> bool:
         """
@@ -91,6 +92,7 @@ class MapGeneratorVisualizer:
         self.map_thread.join()
         generated_map = self.map_thread.generated_map
         self.create_objects_from_map(generated_map)
+        self.object_handler.loading = False
 
     def create_objects_from_map(self, generated_map : Map):
         """

@@ -1,6 +1,7 @@
 import math
 from collections import deque
 import pygame
+import pygame_gui
 from pygame import Vector2
 from pygame import Rect
 from engine.renderer.renderable_rect import RenderableRect
@@ -15,15 +16,27 @@ from engine.renderer import color_prefabs
 class Renderer:
     """Class responsible for rendering objects using pygame,
     including handling framerate and resolution."""
-    def __init__(self) -> None:
+    def __init__(
+            self,
+            render_resolution: tuple[int, int] = (1280, 720),
+            target_fps: int = 120,
+            pygame_render_flags:int = 0,
+            draw_debug_text: bool = False
+        ) -> None:
         self.__render_queue = deque()
-        self.set_resolution((1280, 720))
-        self.target_framerate = 300
-        self.frame_clock = pygame.time.Clock()
+        self.__screen = pygame.display.set_mode(render_resolution, pygame_render_flags)
+        self.__target_framerate = target_fps
+        self.__frame_clock = pygame.time.Clock()
         self.__rendering_camera = RenderingCamera(self.__screen)
         self.__debug_font : pygame.font.Font = pygame.font.SysFont(pygame.font.get_default_font(), 24)
         self.__delta_time = 0
         self.draw_calls = 0
+        self.ui_manager = None
+        self.loading = False
+        self.__loading_surface = pygame.Surface((32, 32), pygame.SRCALPHA)
+        self.__load_image = None
+        self.__load_rotation = 0
+        self.__draw_debug_text = draw_debug_text
 
     @property
     def rendering_camera(self):
@@ -33,8 +46,12 @@ class Renderer:
     def delta_time(self):
         return self.__delta_time
 
-    def set_resolution(self, resolution : tuple):
-        self.__screen = pygame.display.set_mode(resolution)
+    def set_ui_manager(self, ui_manager):
+        self.ui_manager = ui_manager
+
+    def set_load_image(self, load_image: pygame.Surface):
+        self.__load_image = load_image
+        self.__loading_surface.blit(self.__load_image, (0,0))
 
     def add_to_queue(self, renderable):
         self.__render_queue.append(renderable)
@@ -44,11 +61,11 @@ class Renderer:
 
     def render(self):
         self.draw_calls = 0
-        fps = self.frame_clock.get_fps()
+        fps = self.__frame_clock.get_fps()
         if fps == 0:
             self.__delta_time = 99999999999
         else:
-            self.__delta_time = (1 / self.frame_clock.get_fps())
+            self.__delta_time = (1 / self.__frame_clock.get_fps())
         self.__screen.fill((0,0,0))
 
         for rendereable in sorted(self.__render_queue, key=lambda r: r.sorting_layer):
@@ -68,9 +85,26 @@ class Renderer:
             if rendereable.type == RenderableType.TILEMAP:
                 self.__render_tilemap(rendereable)
 
+        if self.__draw_debug_text:
+            self.__render_debug_text()
+        
+        self.__frame_clock.tick_busy_loop(self.__target_framerate)
+        self.ui_manager.update(self.__delta_time)
+        self.ui_manager.draw_ui(self.__screen)
+        if self.loading:
+            self.__load_rotation += 360 * self.__delta_time
+            rotated_load_image = pygame.transform.rotate(self.__loading_surface, self.__load_rotation)
+            new_load_rect = rotated_load_image.get_rect(center=self.__loading_surface.get_rect(topleft=(32, self.__screen.get_height()-48)).center)
+            self.__screen.blit(rotated_load_image, new_load_rect)
+        else:
+            self.__load_rotation = 0
+        pygame.display.update()
+        self.__render_queue.clear()
+
+    def __render_debug_text(self):
         self.__screen.blit(
             self.__debug_font.render(
-                "FPS: "+str(self.frame_clock.get_fps()),
+                "FPS: "+str(self.__frame_clock.get_fps()),
                 True,
                 color_prefabs.WHITE
             ),
@@ -78,7 +112,7 @@ class Renderer:
         )
         self.__screen.blit(
             self.__debug_font.render(
-                "Frametime: "+str(self.frame_clock.get_time()),
+                "Frametime: "+str(self.__frame_clock.get_time()),
                 True,
                 color_prefabs.WHITE
             ),
@@ -116,10 +150,6 @@ class Renderer:
             ),
             (15, 5)
         )
-
-        pygame.display.update()
-        self.__render_queue.clear()
-        self.frame_clock.tick_busy_loop(self.target_framerate)
 
     def __render_rect(self, rendereable_rect : RenderableRect):
         self.draw_calls += 1

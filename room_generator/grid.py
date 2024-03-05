@@ -104,10 +104,7 @@ class AStar:
         self.allowed_path_cell_values = allowed_path_cell_values
 
     def paths_for_rooms(self, room_dict: dict, edges: list[Edge]):
-        c = 0
         for edge in edges:
-            c+=1
-            print(f"{c}/{len(edges)}")
             point_tuple0 = (edge.vertices[0].x, edge.vertices[0].y)
             point_tuple1 = (edge.vertices[1].x, edge.vertices[1].y)
             room0 = room_dict[point_tuple0]

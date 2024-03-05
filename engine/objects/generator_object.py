@@ -11,10 +11,10 @@ class GeneratorObject(Object):
         # TODO: Also make this a more elegant solution at some point
         self.__thread_check_timer = 0
 
-    def generate(self):
+    def generate(self, seed: int = None, size: int = 256, amount: int = 64):
         if self.generator_object is not None:
             if self.generator_object.is_generating is False:
-                self.generator_object.start_generation_thread()
+                self.generator_object.start_generation_thread(seed=seed, size=size, amount=amount)
                 self.__thread_check_timer = 1
 
     def update(self, delta_time : float):
@@ -29,8 +29,8 @@ class GeneratorObject(Object):
             self.generator_object.update_generation_thread_status()
         if self.input_mod > 0:
             self.input_mod +=1
-        if InputHandler.inputs["space"] and self.generator_object.is_generating is False:
-            self.input_mod = 1
+        #if InputHandler.inputs["space"] and self.generator_object.is_generating is False:
+        #    self.input_mod = 1
         if self.input_mod == 1:
             self.generate()
         if self.input_mod > 15:
