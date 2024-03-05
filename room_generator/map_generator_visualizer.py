@@ -23,7 +23,7 @@ class GeneratorThread(threading.Thread):
             generator: MapGenerator,
             seed: int = None,
             size: int = 256,
-            amount: int = 128
+            amount: int = 64
         ):
         threading.Thread.__init__(self, daemon=True)
         self.generator = generator
@@ -99,11 +99,14 @@ class MapGeneratorVisualizer:
         palette = {
             "room_wall" : self.sprite_loader.sprites["room_wall"],
             "room_floor" : self.sprite_loader.sprites["room_floor"],
-            "empty" : self.sprite_loader.sprites["empty"]
+            "empty" : self.sprite_loader.sprites["empty"],
+            "empty2" : self.sprite_loader.sprites["tile"],
+            "corridor_wall" : self.sprite_loader.sprites["corridor_wall"],
+            "corridor_floor" : self.sprite_loader.sprites["corridor_floor"]
         }
         self.create_tilemap_object(generated_map.grid, palette)
-        self.create_line_objects_from_edges(generated_map.map_diagram)
-        self.create_point_objects_from_list(generated_map.points)
+        #self.create_line_objects_from_edges(generated_map.map_diagram)
+        #self.create_point_objects_from_list(generated_map.points)
 
     def delete_objects(self):
         """

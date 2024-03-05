@@ -19,6 +19,54 @@ class Room:
     height : int
     bottom_left_point: Point = None
     _center_point : Point = None
+    _north_entrance = None
+    _east_entrance = None
+    _south_entrance = None
+    _west_entrance = None
+
+    @property
+    def north_entrance(self):
+        if (
+            self._center_point is not None
+        ):
+            self._north_entrance = (
+                int(self._center_point.x),
+                int(self.bottom_left_point.y+self.height)
+            )
+        return self._north_entrance
+
+    @property
+    def east_entrance(self):
+        if (
+            self._center_point is not None
+        ):
+            self._east_entrance = (
+                int(self.bottom_left_point.x + self.width),
+                int(self._center_point.y)
+            )
+        return self._east_entrance
+
+    @property
+    def south_entrance(self):
+        if (
+            self._center_point is not None
+        ):
+            self._south_entrance = (
+                int(self._center_point.x),
+                int(self.bottom_left_point.y)
+            )
+        return self._south_entrance
+
+    @property
+    def west_entrance(self):
+        if (
+            self._center_point is not None
+        ):
+            self._west_entrance = (
+                int(self.bottom_left_point.x),
+                int(self._center_point.y)
+            )
+        return self._west_entrance
 
     @property
     def center_point(self):
@@ -46,7 +94,7 @@ class RoomPlacer:
     def __init__(self) -> None:
         self.room_min_side_length = 5
         self.room_max_side_length = 30
-        self.min_room_buffer_distance = 4
+        self.min_room_buffer_distance = 6
 
     def generate_rooms(
             self,
@@ -69,14 +117,17 @@ class RoomPlacer:
             random.seed(seed)
         new_grid = self.create_empty_grid(grid.size)
         rooms: list[Room] = []
+        room_dict = {}
 
         for __ in range(amount):
             new_room = self.create_random_room(seed)
             success = self.try_to_place_room(new_room, rooms, new_grid, seed)
             if success:
+                point_tuple = (new_room.center_point.x, new_room.center_point.y)
                 rooms.append(new_room)
+                room_dict[point_tuple] = new_room
 
-        return (new_grid, rooms)
+        return (new_grid, room_dict)
 
     def create_empty_grid(self, size: int) -> Grid:
         """
@@ -126,7 +177,7 @@ class RoomPlacer:
             room_list: list[Room],
             grid: Grid,
             seed: int = None,
-            maximum_attempts: int = 5
+            maximum_attempts: int = 100
         ) -> bool:
         """
         Tries to place a room in a random position.
@@ -284,12 +335,12 @@ class RoomPlacer:
         if seed is not None:
             random.seed(seed)
 
-        x = random.uniform(
+        x = int(random.uniform(
             -int(grid.size // 2 + self.min_room_buffer_distance),
             int(grid.size // 2 - room.width - self.min_room_buffer_distance)
-        )
-        y = random.uniform(
+        ))
+        y = int(random.uniform(
             -int(grid.size // 2 + self.min_room_buffer_distance),
             int(grid.size // 2 - room.height - self.min_room_buffer_distance)
-        )
+        ))
         return Point(x, y)

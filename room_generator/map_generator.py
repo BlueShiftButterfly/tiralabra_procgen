@@ -6,7 +6,9 @@ The latter is used to generate a 2d map procedurally.
 import random
 from dataclasses import dataclass
 from room_generator.geometry import Point, Edge
-from room_generator.grid import Grid
+from room_generator.grid import Grid, AStar
+from room_generator.undirected_graphing import RandomEdgeConnector, PrimMinSpanningTree, BowyerWatson
+from room_generator.room_placer import RoomPlacer
 
 @dataclass
 class Map:
@@ -46,6 +48,7 @@ class MapGenerator:
         self.triangulator = triangulator
         self.min_tree_generator = min_tree_generator
         self.room_connector = room_connector
+        self.pather = None
 
     def generate(
             self,
@@ -74,9 +77,10 @@ class MapGenerator:
             grid,
             seed
         )
-        rooms = room_grid_tuple[1]
+        rooms: dict = room_grid_tuple[1]
         new_grid = room_grid_tuple[0]
-        points = [room.center_point for room in rooms]
+        self.pather = AStar(new_grid)
+        points = [room.center_point for room in rooms.values()]
         triangulation_edges = self.triangulator.triangulate_points(
             points
         )
@@ -88,6 +92,12 @@ class MapGenerator:
             mst,
             triangulation_edges
         )
+        print("POINTS", len(points))
+        self.pather.paths_for_rooms(rooms, complete_map_diagram)
+        for y in range((-size // 2), (size // 2)):
+            for x in range((-size // 2), (size // 2)):
+                if grid.get_cell(x, y) == "empty2":
+                    grid.set_cell(x, y, "empty")
         return Map(
             size,
             points,
