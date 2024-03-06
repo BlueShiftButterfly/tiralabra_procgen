@@ -49,13 +49,15 @@ class MapGeneratorVisualizer:
     def __init__(
             self,
             object_handler: ObjectHandler,
-            sprite_loader: SpriteLoader
+            sprite_loader: SpriteLoader,
+            debug: bool = False
         ) -> None:
         self.object_handler = object_handler
         self.sprite_loader = sprite_loader
         self.object_id_set = []
         self.is_generating = False
         self.map_thread = None
+        self.debug = debug
 
     def start_generation_thread(self, seed: int = None, size: int = 256, amount: int = 64) -> None:
         """
@@ -107,8 +109,9 @@ class MapGeneratorVisualizer:
             "corridor_floor" : self.sprite_loader.sprites["corridor_floor"]
         }
         self.create_tilemap_object(generated_map.grid, palette)
-        #self.create_line_objects_from_edges(generated_map.map_diagram)
-        #self.create_point_objects_from_list(generated_map.points)
+        if self.debug:
+            self.create_line_objects_from_edges(generated_map.map_diagram)
+            self.create_point_objects_from_list(generated_map.points)
 
     def delete_objects(self):
         """
