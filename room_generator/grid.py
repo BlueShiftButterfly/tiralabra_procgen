@@ -99,7 +99,15 @@ class Grid:
         return neighbors
 
 class AStar:
-    def __init__(self, grid: Grid, allowed_path_cell_values: list[str] = ["empty", "corridor_floor", "corridor_wall"]) -> None:
+    def __init__(
+            self,
+            grid: Grid,
+            allowed_path_cell_values: list[str] = [
+                "empty",
+                "corridor_floor",
+                "corridor_wall"
+            ]
+        ) -> None:
         self.grid = grid
         self.allowed_path_cell_values = allowed_path_cell_values
 
@@ -115,34 +123,95 @@ class AStar:
             if dir == Direction.NORTH:
                 start = (room0.north_entrance[0], room0.north_entrance[1] + 2)
                 end = (room1.south_entrance[0], room1.south_entrance[1] - 2)
-                self.grid.set_cell(room0.north_entrance[0], room0.north_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.south_entrance[0], room1.south_entrance[1], "corridor_floor")
-                self.grid.set_cell(room0.north_entrance[0], room0.north_entrance[1]+1, "corridor_floor")
-                self.grid.set_cell(room1.south_entrance[0], room1.south_entrance[1]-1, "corridor_floor")
+                self.grid.set_cell(
+                    room0.north_entrance[0],
+                    room0.north_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.south_entrance[0],
+                    room1.south_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room0.north_entrance[0],
+                    room0.north_entrance[1]+1,
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.south_entrance[0],
+                    room1.south_entrance[1]-1,
+                    "corridor_floor"
+                )
             if dir == Direction.EAST:
                 start = (room0.east_entrance[0] + 2, room0.east_entrance[1])
                 end = (room1.west_entrance[0] - 2, room1.west_entrance[1])
-                self.grid.set_cell(room0.east_entrance[0], room0.east_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.west_entrance[0], room1.west_entrance[1], "corridor_floor")
-                self.grid.set_cell(room0.east_entrance[0]+1, room0.east_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.west_entrance[0]-1, room1.west_entrance[1], "corridor_floor")
+                self.grid.set_cell(
+                    room0.east_entrance[0],
+                    room0.east_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.west_entrance[0],
+                    room1.west_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room0.east_entrance[0]+1,
+                    room0.east_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.west_entrance[0]-1,
+                    room1.west_entrance[1],
+                    "corridor_floor"
+                )
             if dir == Direction.WEST:
                 start = (room0.west_entrance[0] - 2, room0.west_entrance[1])
                 end = (room1.east_entrance[0] + 2, room1.east_entrance[1])
-                self.grid.set_cell(room0.west_entrance[0], room0.west_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.east_entrance[0], room1.east_entrance[1], "corridor_floor")
-                self.grid.set_cell(room0.west_entrance[0]-1, room0.west_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.east_entrance[0]+1, room1.east_entrance[1], "corridor_floor")
+                self.grid.set_cell(
+                    room0.west_entrance[0],
+                    room0.west_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.east_entrance[0],
+                    room1.east_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room0.west_entrance[0]-1,
+                    room0.west_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.east_entrance[0]+1,
+                    room1.east_entrance[1],
+                    "corridor_floor"
+                )
             elif dir == Direction.SOUTH:
                 start = (room0.south_entrance[0], room0.south_entrance[1] - 2)
                 end = (room1.north_entrance[0], room1.north_entrance[1] + 2)
-                self.grid.set_cell(room0.south_entrance[0], room0.south_entrance[1], "corridor_floor")
-                self.grid.set_cell(room1.north_entrance[0], room1.north_entrance[1], "corridor_floor")
-                self.grid.set_cell(room0.south_entrance[0], room0.south_entrance[1]-1, "corridor_floor")
-                self.grid.set_cell(room1.north_entrance[0], room1.north_entrance[1]+1, "corridor_floor")
-            #if start is None or end is None:
-            #    continue
-            #print((start[0], start[1]), (end[0], end[1]))
+                self.grid.set_cell(
+                    room0.south_entrance[0],
+                    room0.south_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.north_entrance[0],
+                    room1.north_entrance[1],
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room0.south_entrance[0],
+                    room0.south_entrance[1]-1,
+                    "corridor_floor"
+                )
+                self.grid.set_cell(
+                    room1.north_entrance[0],
+                    room1.north_entrance[1]+1,
+                    "corridor_floor"
+                )
             self.grid.set_cell(start[0], start[1], "corridor_floor")
             self.grid.set_cell(end[0], end[1], "corridor_floor")
             tiles = self.find_path((start[0], start[1]), (end[0], end[1]))
@@ -151,12 +220,13 @@ class AStar:
                 for neighbor_tile in self.grid.get_full_cell_neighbours(tile[0], tile[1]):
                     if self.grid.get_cell(neighbor_tile[0], neighbor_tile[1]) == "empty":
                         self.grid.set_cell(neighbor_tile[0], neighbor_tile[1], "corridor_wall")
-            
 
     def get_direction_from_edge(self, edge: Edge):
-        edge_dir_vector = Vector2(edge.vertices[1].x - edge.vertices[0].x, edge.vertices[1].y - edge.vertices[0].y)
+        edge_dir_vector = Vector2(
+            edge.vertices[1].x - edge.vertices[0].x,
+            edge.vertices[1].y - edge.vertices[0].y
+        )
         angle = edge_dir_vector.as_polar()[1]
-        #print(edge_dir_vector, angle)
         if 45 <= angle <= 135:
             return Direction.NORTH
         elif 135 < angle or -135 > angle:
@@ -199,13 +269,17 @@ class AStar:
             current = queue.pop()
             if current == end:
                 return self.reconstruct_path(current, previous_cheapest_node)
-            neighbor_cells = self.get_valid_neighbors(self.grid.get_cell_neighbours(current[0], current[1]))
+            neighbor_cells = self.get_valid_neighbors(
+                self.grid.get_cell_neighbours(current[0], current[1])
+            )
             for neighbor in neighbor_cells:
                 tentative_score = cheapest_path_score[current] + 1
                 if tentative_score < cheapest_path_score[neighbor]:
                     previous_cheapest_node[neighbor] = current
                     cheapest_path_score[neighbor] = tentative_score
-                    estimate_path_score[neighbor] = tentative_score + self.calculate_heuristic_score(neighbor, end)
+                    estimate_path_score[neighbor] = (
+                        tentative_score + self.calculate_heuristic_score(neighbor, end)
+                    )
                     if neighbor not in queue:
                         queue.append(neighbor)
 
@@ -224,7 +298,7 @@ class AStar:
                 for other_neighbor in self.grid.get_full_cell_neighbours(neighbour[0], neighbour[1]):
                     if other_neighbor is None:
                         continue
-                    if self.grid.get_cell(other_neighbor[0], other_neighbor[1]) not in self.allowed_path_cell_values:
+                    if (self.grid.get_cell(other_neighbor[0], other_neighbor[1]) not in self.allowed_path_cell_values):
                         valid = False
                 if valid:
                     valid_neighbours.append(neighbour)
