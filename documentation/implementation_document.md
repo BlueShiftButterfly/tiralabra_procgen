@@ -3,7 +3,7 @@
 ## Program Architecture
 
 The GUI and related features are currently handled by the engine module. The algorithms and other back end features are located
-in the room_generator module.
+in the dungeon_generator module.
 
 ## Time Complexity Analysis
 

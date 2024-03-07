@@ -1,5 +1,5 @@
 [run]
-source = room_generator
+source = dungeon_generator
 omit = test/**, main_gui.py
 [coverage:report]
 skip_empty = true

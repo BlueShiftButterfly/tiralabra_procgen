@@ -6,8 +6,8 @@ Used to generate random rooms in a grid.
 import random
 from dataclasses import dataclass
 from pygame import Rect
-from room_generator.grid import Grid
-from room_generator.geometry import Point
+from dungeon_generator.grid import Grid
+from dungeon_generator.geometry import Point
 
 @dataclass
 class Room:

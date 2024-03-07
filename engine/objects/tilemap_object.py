@@ -1,7 +1,7 @@
 from pygame import Vector2
 from engine.objects.object import Object
 from engine.renderer.renderable_tilemap import RenderableTilemap, VisualTile
-from room_generator.grid import Grid
+from dungeon_generator.grid import Grid
 
 class TilemapObject(Object):
     def __init__(

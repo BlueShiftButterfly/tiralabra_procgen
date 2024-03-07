@@ -8,11 +8,11 @@ from pygame import Vector2
 from engine.objects.object_handler import ObjectHandler
 from engine.renderer import color_prefabs
 from engine.resource_loader.sprite_loader import SpriteLoader
-from room_generator.geometry import Point, Edge
-from room_generator.grid import Grid
-from room_generator.map_generator import MapGenerator, Map
-from room_generator.undirected_graphing import BowyerWatson, RandomEdgeConnector, PrimMinSpanningTree
-from room_generator.room_placer import RoomPlacer
+from dungeon_generator.geometry import Point, Edge
+from dungeon_generator.grid import Grid
+from dungeon_generator.map_generator import MapGenerator, Map
+from dungeon_generator.undirected_graphing import BowyerWatson, RandomEdgeConnector, PrimMinSpanningTree
+from dungeon_generator.room_placer import RoomPlacer
 
 class GeneratorThread(threading.Thread):
     """

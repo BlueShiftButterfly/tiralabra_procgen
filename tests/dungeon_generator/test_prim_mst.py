@@ -1,6 +1,6 @@
 import unittest
-from room_generator.undirected_graphing import PrimMinSpanningTree
-from room_generator.geometry import Point, Edge
+from dungeon_generator.undirected_graphing import PrimMinSpanningTree
+from dungeon_generator.geometry import Point, Edge
 
 class TestPrimMinSpanningTree(unittest.TestCase):
     def test_prim_contains_all_points_simple(self):

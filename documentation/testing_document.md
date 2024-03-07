@@ -31,5 +31,5 @@ poetry run coverage html
 Pylint score can be obtained using the following command
 
 ~~~
-poetry run pylint engine room_generator
+poetry run pylint engine dungeon_generator
 ~~~

@@ -10,7 +10,7 @@ from engine.objects.camera_object import Camera
 from engine.objects.generator_object import GeneratorObject
 from engine.objects.tilemap_object import TilemapObject
 from engine.renderer import color_prefabs
-from room_generator.grid import Grid
+from dungeon_generator.grid import Grid
 
 class ObjectHandler:
     def __init__(self) -> None:

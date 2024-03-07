@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run Pylint
-        run: poetry run pylint room_generator --fail-under=9
+        run: poetry run pylint dungeon_generator --fail-under=9
       - name: Run tests
         run: poetry run coverage run --branch -m unittest discover
       - name: Coverage report

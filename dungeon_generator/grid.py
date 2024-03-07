@@ -4,7 +4,7 @@ Module containing the Grid class.
 import math
 import enum
 from pygame import Vector2
-from room_generator.geometry import Edge
+from dungeon_generator.geometry import Edge
 
 class Direction(enum.Enum):
     NORTH = 0

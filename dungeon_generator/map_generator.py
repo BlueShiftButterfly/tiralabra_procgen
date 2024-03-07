@@ -5,10 +5,10 @@ The latter is used to generate a 2d map procedurally.
 
 import random
 from dataclasses import dataclass
-from room_generator.geometry import Point, Edge
-from room_generator.grid import Grid, AStar
-from room_generator.undirected_graphing import RandomEdgeConnector, PrimMinSpanningTree, BowyerWatson
-from room_generator.room_placer import RoomPlacer
+from dungeon_generator.geometry import Point, Edge
+from dungeon_generator.grid import Grid, AStar
+from dungeon_generator.undirected_graphing import RandomEdgeConnector, PrimMinSpanningTree, BowyerWatson
+from dungeon_generator.room_placer import RoomPlacer
 
 @dataclass
 class Map:

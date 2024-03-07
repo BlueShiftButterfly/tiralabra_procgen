@@ -3,7 +3,7 @@ Module contains classes to create and manipulate undirected graphs.
 """
 import math
 import random
-from room_generator.geometry import Point, Edge, Triangle
+from dungeon_generator.geometry import Point, Edge, Triangle
 
 def get_point_edge_refs(
         edges: list[Edge]
