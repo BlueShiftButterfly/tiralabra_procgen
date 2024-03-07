@@ -43,11 +43,31 @@ class BowyerWatson:
     Implementation of the Bowyer-Watson algorithm for creating
     a Delaunay triangulation from a set of points.
     """
-    # Implementation of pseudocode from
-    # https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
-    # Also inspired by
-    # https://www.gorillasun.de/blog/bowyer-watson-algorithm-for-delaunay-triangulation/
-    # This is an inefficient algorithm with no optimizations
+
+    def get_bounds_from_points(self, points: list[Point]) -> tuple[Point, Point]:
+        if len(points) <= 1:
+            return []
+        bounds_max_point = points[0]
+        bounds_min_point = points[1]
+
+        for point in points:
+            bounds_max_point = Point(
+                max(bounds_max_point.x, point.x),
+                max(bounds_max_point.y, point.y)
+            )
+            bounds_min_point = Point(
+                min(bounds_min_point.x, point.x),
+                min(bounds_min_point.y, point.y)
+            )
+        return (bounds_min_point, bounds_max_point)
+
+    def get_bad_triangles(self, point: Point, triangles: list[Triangle]) -> list[Triangle]:
+        bad_triangles : list[Triangle] = []
+        for triangle in triangles:
+            if triangle.is_point_in_circumcircle(point):
+                bad_triangles.append(triangle)
+        return bad_triangles
+
     def triangulate_points(self, points : list[Point]) -> list[Edge]:
         """
         Triangulates a given set of points using the Bowyer-Watson algorithm.
@@ -59,34 +79,25 @@ class BowyerWatson:
         Returns:
             Returns the Delaunay triangulation as a list of edges.
         """
+        # Implementation of pseudocode from
+        # https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm
+        # Also inspired by
+        # https://www.gorillasun.de/blog/bowyer-watson-algorithm-for-delaunay-triangulation/
+        # This is an inefficient algorithm with no optimizations
         if len(points) <= 1:
             return []
-        points_to_triangulate = points
-        bounds_max_point = points[0]
-        bounds_min_point = points[1]
-
-        for point in points_to_triangulate:
-            bounds_max_point = Point(
-                max(bounds_max_point.x, point.x),
-                max(bounds_max_point.y, point.y)
-            )
-            bounds_min_point = Point(
-                min(bounds_min_point.x, point.x),
-                min(bounds_min_point.y, point.y)
-            )
-
+        bounds = self.get_bounds_from_points(points)
         super_triangle = self.create_supertriangle(
-            bounds_min_point,
-            bounds_max_point
+            bounds[0],
+            bounds[1]
         )
         triangles : list[Triangle] = []
+        bad_triangles: list[Triangle] = []
         triangles.append(super_triangle)
 
-        for point in points_to_triangulate:
-            bad_triangles : list[Triangle] = []
-            for triangle in triangles:
-                if triangle.is_point_in_circumcircle(point):
-                    bad_triangles.append(triangle)
+        for point in points:
+            bad_triangles.clear()
+            bad_triangles = self.get_bad_triangles(point, triangles)
 
             polygon : list[Edge] = []
             for bad_triangle in bad_triangles:
