@@ -119,9 +119,9 @@ class RoomPlacer:
         rooms: list[Room] = []
         room_dict = {}
 
-        for __ in range(amount):
-            new_room = self.create_random_room(seed)
-            success = self.try_to_place_room(new_room, rooms, new_grid, seed)
+        for i in range(amount):
+            new_room = self.create_random_room(seed+(2*i))
+            success = self.try_to_place_room(new_room, rooms, new_grid, seed+i)
             if success:
                 point_tuple = (new_room.center_point.x, new_room.center_point.y)
                 rooms.append(new_room)
@@ -193,11 +193,11 @@ class RoomPlacer:
         Returns:
             A boolean on if the room was successfully generated.
         """
-        for __ in range(maximum_attempts):
+        for i in range(maximum_attempts):
             random_position = self.create_random_room_position(
                 room,
                 grid,
-                seed
+                seed+i
             )
             room.bottom_left_point = random_position
             if self.can_place_room(room, room_list, grid):

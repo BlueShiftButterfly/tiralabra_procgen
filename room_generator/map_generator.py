@@ -52,7 +52,7 @@ class MapGenerator:
 
     def generate(
             self,
-            seed : int = None,
+            seed : int,
             size : int = 64,
             amount : int = 32
         ) -> Map:

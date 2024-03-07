@@ -21,7 +21,7 @@ class GeneratorThread(threading.Thread):
     def __init__(
             self,
             generator: MapGenerator,
-            seed: int = None,
+            seed: int,
             size: int = 256,
             amount: int = 64
         ):
@@ -59,7 +59,7 @@ class MapGeneratorVisualizer:
         self.map_thread = None
         self.debug = debug
 
-    def start_generation_thread(self, seed: int = None, size: int = 256, amount: int = 64) -> None:
+    def start_generation_thread(self, seed: int, size: int = 256, amount: int = 64) -> None:
         """
         Starts a separate thread for generating a map.
         """
