@@ -16,12 +16,12 @@ class InputHandler:
 
     def __init__(self) -> None:
         self.keybinds = {
-            "up" : pygame.K_w,
-            "down" : pygame.K_s,
-            "left" : pygame.K_a,
-            "right" : pygame.K_d,
-            "zoom_in" : pygame.K_q,
-            "zoom_out" : pygame.K_e,
+            "up" : pygame.K_UP,
+            "down" : pygame.K_DOWN,
+            "left" : pygame.K_LEFT,
+            "right" : pygame.K_RIGHT,
+            "zoom_in" : pygame.K_PAGEDOWN,
+            "zoom_out" : pygame.K_PAGEUP,
             "quit" : pygame.K_ESCAPE,
             "space" : pygame.K_SPACE
         }

@@ -37,7 +37,7 @@ class UIHandler:
             anchors={"right" : "right"}
         )
         self.room_count_slider = pygame_gui.elements.UIHorizontalSlider(
-            relative_rect=pygame.Rect((-232, 244), (200, 32)),
+            relative_rect=pygame.Rect((-232, 264), (200, 32)),
             manager=self.ui_manager,
             start_value=32,
             value_range=(8, 128),
@@ -59,6 +59,12 @@ class UIHandler:
         self.seed_text_box.allowed_characters
         self.seed_text = self.seed_text_box.text
         self.seed_hash = None
+
+        self.controls_text = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((0, 0), (650, 64)),
+            manager=self.ui_manager,
+            text="Controls: Arrow keys to move PgUp/PgDown to zoom in and out Esc to quit program"
+        )
 
     def set_generator_reference(self, generator):
         self.generator_reference = generator

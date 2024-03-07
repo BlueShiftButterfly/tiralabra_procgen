@@ -142,14 +142,6 @@ class Renderer:
             ),
             (15, 105)
         )
-        self.__screen.blit(
-            self.__debug_font.render(
-                "SPACE: generate map     ESC: quit program     W/A/S/D: move camera     Q/E:zoom in/out",
-                True,
-                color_prefabs.WHITE
-            ),
-            (15, 5)
-        )
 
     def __render_rect(self, rendereable_rect : RenderableRect):
         self.draw_calls += 1
