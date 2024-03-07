@@ -1,7 +1,7 @@
 import pygame
 from engine.engine import Engine
 from pygame import Vector2
-from dungeon_generator.map_generator_visualizer import MapGeneratorVisualizer
+from generator_engine_bridge.map_generator_visualizer import MapGeneratorVisualizer
 
 def main():
     engine = Engine(render_resolution=(1280, 720))
