@@ -2,8 +2,14 @@
 
 Currently this project has unit testing and linting setup, using the unittest and pylint modules.
 
-## Unit Test Coverage
+## CI
+
 ![CI](https://github.com/BlueShiftButterfly/tiralabra_procgen/actions/workflows/main.yml/badge.svg)
+
+Continuous integration is implemented using Github Actions. Passing CI requires passing all unit tests and for the backend a pylint score higher than 9.
+
+## Unit Test Coverage
+
 [![codecov](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen/graph/badge.svg?token=TO1ECLJ9QO)](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen)
 
 The graphical components in the engine module are not tested. The room generator module is tested.
@@ -31,5 +37,5 @@ poetry run coverage html
 Pylint score can be obtained using the following command
 
 ~~~
-poetry run pylint engine dungeon_generator
+poetry run pylint dungeon_generator generator_engine_bridge
 ~~~
