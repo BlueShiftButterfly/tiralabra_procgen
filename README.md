@@ -3,6 +3,8 @@
 ![CI](https://github.com/BlueShiftButterfly/tiralabra_procgen/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen/graph/badge.svg?token=TO1ECLJ9QO)](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen)
 
+![Screenshot](https://github.com/BlueShiftButterfly/tiralabra_procgen/repo_assets/example_screenshot.png)
+
 ## User Guide 
 
 [User guide](https://github.com/BlueShiftButterfly/tiralabra_procgen/blob/main/documentation/user_guide.md)

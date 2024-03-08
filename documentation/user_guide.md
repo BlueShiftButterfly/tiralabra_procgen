@@ -23,3 +23,5 @@ The camera can be moved using the arrow keys. Zooming is done using PageDown and
 Before generation, the seed, map size and room count can be modified using the GUI. Clicking generate generates a map using the specified settings.
 
 Maps above a room count of 100 can take a while to generate.
+
+![Screenshot](https://github.com/BlueShiftButterfly/tiralabra_procgen/repo_assets/example_screenshot.png)
