@@ -18,7 +18,8 @@ The program can be run from the project root directory using
 python3 main_gui.py
 ~~~
 
-Currently the program does not have any user inputs. When run, the program generates and displays a random Delaunay triangulation with it's corresponding
-Minimum spanning tree.
+The camera can be moved using the arrow keys. Zooming is done using PageDown and PageUp.
 
-The user can navigate using WASD and Q/E to zoom in and out.
+Before generation, the seed, map size and room count can be modified using the GUI. Clicking generate generates a map using the specified settings.
+
+Maps above a room count of 100 can take a while to generate.

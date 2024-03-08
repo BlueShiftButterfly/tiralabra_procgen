@@ -12,7 +12,7 @@ Continuous integration is implemented using Github Actions. Passing CI requires 
 
 [![codecov](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen/graph/badge.svg?token=TO1ECLJ9QO)](https://codecov.io/gh/BlueShiftButterfly/tiralabra_procgen)
 
-The graphical components in the engine module are not tested. The room generator module is tested.
+The graphical components in the engine module are not tested. Only the dungeon_generator module is tested.
 
 ## Running Tests
 
